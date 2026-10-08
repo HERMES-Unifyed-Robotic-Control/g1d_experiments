@@ -11,5 +11,5 @@
     "branch": "zbk/c01-single-decoder-finger-delta",
     "commit": "90fa71f83c25b1ac0c5c4ba9676464015ba069b8"
   },
-  "c01_g1d_status": "native16 dataset/decoder/loss components; E/pi training not performed"
+  "c01_g1d_status": "native16 train/evaluation entry points implemented; statistics prepared; E/pi training blocked by DINOv3 gated403, not GPU-validated"
 }

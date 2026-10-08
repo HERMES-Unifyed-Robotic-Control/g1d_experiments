@@ -1,6 +1,6 @@
 # G1D Food Sorting Experiments
 
-G1D 菊花、红枣、柠檬片任务的完整数据处理、subtask 标注、pi0.5 baseline、训练对照、真机执行和 Dexjoco C01 数据/decoder接口交付。**当前 baseline 为官方 OpenPI pi0.5 七个 subtask 的 LoRA step7500**，保留 2026-09-26 曾成功抓杯的权重；它是独立baseline，尚不是G1D C01权重。用户报告当前控制修正后的效果可用，但尚无系统闭环成功率统计。
+G1D 菊花、红枣、柠檬片任务的完整数据处理、subtask 标注、pi0.5 baseline、训练对照、真机执行和 Dexjoco C01 G1D训练与评测适配。**当前 baseline 为官方 OpenPI pi0.5 七个 subtask 的 LoRA step7500**，保留 2026-09-26 曾成功抓杯的权重；它是独立baseline，尚不是G1D C01权重。用户报告当前控制修正后的效果可用，但尚无系统闭环成功率统计。
 
 > 标注、四个视频数据包和7500baseline均已上传并固定revision。比较权重受A800网络/跳板断线影响尚未完成上传；以 `ARTIFACTS.json` 中 `phase=complete` 为准。
 
@@ -130,7 +130,7 @@ loader = DataLoader(G1DC01Windows('artifacts/data/g1d_subtasks_official_train_v1
 # π推理只消费batch['observation']；batch['supervision']仅用于E/损失监督
 ```
 
-**这不是已训练好的G1D C01 policy。** 仍需G1D DINO/world特征、train统计/PCA、原生16D E训练/cache、JAX decoder导出与pi桥接、G1D GT-AUX校准及策略训练。上游仿真C01检查点不能直接插到G1D执行。上游GT-AUX权重0.25628781345139295和finger-Δ权重0.05只是参考，不声称在G1D已校准或有效。详见[匹配说明](DEXJOCO_G1D_MATCHING.md)。本次没有启动新C01训练或真机评测。
+**这不是已训练好的G1D C01 policy。** G1D state/action实测维数、train-only统计已完成；已实现视觉准备、E训练/cache导出、16D JAX decoder/pi桥接、GT-AUX校准、π训练及动作评估入口。运行流程见 [RUN_C01.md](experiments/g1d_c01_20261008/RUN_C01.md)。当前DINOv3访问403，需要实际权重才能启动；新入口未进行GPU运行验证。上游仿真C01检查点不能直接插到G1D执行。上游GT-AUX权重0.25628781345139295和finger-Δ权重0.05只是参考，不声称在G1D已校准或有效。详见[匹配说明](DEXJOCO_G1D_MATCHING.md)。本次没有启动新C01训练或真机评测。
 
 ## 进度评分（满分10）
 

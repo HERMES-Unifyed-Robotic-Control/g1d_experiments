@@ -1,0 +1,42 @@
+{
+  "schema": "g1d_c01_native16_joint_response_v1",
+  "state_dim": 16,
+  "action_dim": 16,
+  "state_order": [
+    "left_shoulder_pitch",
+    "left_shoulder_roll",
+    "left_shoulder_yaw",
+    "left_elbow",
+    "left_wrist_roll",
+    "left_wrist_pitch",
+    "left_wrist_yaw",
+    "right_shoulder_pitch",
+    "right_shoulder_roll",
+    "right_shoulder_yaw",
+    "right_elbow",
+    "right_wrist_roll",
+    "right_wrist_pitch",
+    "right_wrist_yaw",
+    "left_gripper",
+    "right_gripper"
+  ],
+  "decoder_raw_state_dim": 16,
+  "policy_state_padding": "separate from raw state; never pad to DexJoCo23/46D",
+  "upstream_state_dims": [
+    23,
+    46
+  ],
+  "upstream_action_dims": [
+    22,
+    44
+  ],
+  "train_episodes": 885,
+  "validation_episodes": 100,
+  "train_frames": 183647,
+  "validation_frames": 21907,
+  "train_source_episodes": 177,
+  "validation_source_episodes": 20,
+  "group_overlap": 0,
+  "statistics_sha256": "d9902ba926d8474095086bbb15e532fb682f183508b71faa6766677c174b8171",
+  "response": "consecutive measured qpos delta, native16; no synthetic fingertip/tactile data"
+}

@@ -41,3 +41,7 @@ Decoder构造要求训练集产生的state_mean/std、action_mean/std；不接�
 本次完成数据和decoder/损失组件交付，没有运行上述新E/π训练、组件测试或真机评测。上游11任务51.64%等结果属于仿真任务与原检查点，不是G1D结果。
 
 图像适配保留RGB、224×224 PIL bilinear resize-with-pad，与当前OpenPI客户端一致；C01 backbone自身normalization仍需按其协议执行。
+
+## 2026-10-08后续实现
+
+由本项目自行完成适配、E/π训练与评测。新增native16 codec、单步实测关节响应、视觉目标准备、E训练与导出、JAX单decoder、π联合训练/校准和holdout动作评估代码。上述“仍需完成”清单中的代码入口已补齐；训练执行、GPU数值一致性与真实评测尚未完成。实际命令及DINOv3资产阻塞见 `experiments/g1d_c01_20261008/RUN_C01.md`。

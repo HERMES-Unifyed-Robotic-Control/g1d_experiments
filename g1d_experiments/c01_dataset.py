@@ -40,7 +40,7 @@ class G1DC01Windows(Dataset):
         return {'observation':{'rgb':np.stack([self.frame(ep,v,t) for v in VIEWS]),'state':state[t],
                                 'prompt':self.tasks[int(table['task_index'][t].as_py())]},
                 'supervision':{'action':action[t:t+self.horizon],'state_future':state[future],
-                               'joint_response':state[future]-state[t], 'valid':np.ones(self.horizon,bool),
+                               'joint_response':state[future]-state[future-1], 'valid':np.ones(self.horizon,bool),
                                'future_frame_indices':future},
                 'metadata':{'episode_index':ep,'source_episode_index':self.by_id[ep].get('source_episode_index',ep),
                             'anchor_frame':t,'fps':30,'views':VIEWS,'response_protocol':'g1d_measured_joint_delta_v1'}}
