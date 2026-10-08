@@ -1,0 +1,41 @@
+{
+  "dataset_repo": "yky666/humanoid_long_horizon_tasks",
+  "model_repo": "yky666/g1d-pi05-subtask-baseline",
+  "annotations_revision": "40881b8b02fada4ca8c221af06827c4338731a17",
+  "datasets": {
+    "whole_197": {
+      "path": "g1d_food_sorting/processed/whole_197.tar",
+      "revision": null,
+      "sha256": "402bddf7657a13be69af90e63f7faf1ad9ce9850c1fe4acd1410534c90f4c481",
+      "bytes": 6701445120,
+      "phase": "uploading"
+    },
+    "subtasks_all": {
+      "path": "g1d_food_sorting/processed/subtasks_all.tar",
+      "revision": null,
+      "sha256": null,
+      "bytes": null,
+      "phase": "pending"
+    },
+    "subtasks_train": {
+      "path": "g1d_food_sorting/processed/subtasks_train.tar",
+      "revision": null,
+      "sha256": null,
+      "bytes": null,
+      "phase": "pending"
+    },
+    "subtasks_validation": {
+      "path": "g1d_food_sorting/processed/subtasks_validation.tar",
+      "revision": null,
+      "sha256": null,
+      "bytes": null,
+      "phase": "pending"
+    }
+  },
+  "baseline": {
+    "revision": null,
+    "step": 7500,
+    "phase": "uploading"
+  },
+  "comparisons": {}
+}

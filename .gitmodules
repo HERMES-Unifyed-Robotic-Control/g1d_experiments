@@ -1,0 +1,3 @@
+[submodule "third_party/eft"]
+	path = third_party/eft
+	url = https://github.com/HERMES-Unifyed-Robotic-Control/EFT-Embodied-Future-Transitions.git

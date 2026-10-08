@@ -1,0 +1,53 @@
+{
+  "contract_version": "g1d-pi05-v1",
+  "official_reference": "215abfb217dbac7d5f1273282331b9b1866c0479",
+  "asset_id": "g1d_joint_train_v1",
+  "dataset": "g1d_food_sorting_123_lerobot",
+  "profiles": {
+    "official": {
+      "config": "g1d_food_sorting_123_pi05_40k",
+      "training_config": "g1d_pi05_joint_fullft_v1",
+      "checkpoint": "/mnt/data2/yangky/test/xr_teleoperate_g1d/deploy/releases/joint_fullft_197_20261005/36000",
+      "normalization": "official_quantile_unclipped",
+      "norm_stats_sha256": "abe9d6b2d681d3273937b26bb0a8cd11dd6362392c2019428a99dd0fdd6ef56b",
+      "backend": "jax_full_ft",
+      "dataset": "g1d_food_sorting_123_lerobot",
+      "asset_id": "g1d_joint_train_v1",
+      "prompt_mode": "whole",
+      "source": "197_episode_joint_fullft_40k_validation_best_36000"
+    }
+  },
+  "client": {
+    "policy_host": "192.168.10.116",
+    "policy_port": 9019,
+    "img_server_ip": "192.168.10.104",
+    "network_interface": "eth0",
+    "task": "chrysanthemum",
+    "prompt_mode": "whole",
+    "subtask_schedule": "fixed",
+    "subtask_index": 0,
+    "steps": 3600,
+    "fps": 30,
+    "execute_chunk_steps": 8,
+    "initial_state": "current",
+    "max_arm_delta": 0.3,
+    "max_gripper_delta": 1.0,
+    "arm_velocity_limit": 30.0,
+    "disable_action_smoothing": false,
+    "waist_yaw_target": 0.0,
+    "async_prefetch": true,
+    "prefetch_remaining_steps": 4,
+    "interpolation_substeps": 4,
+    "chunk_blend_steps": 2,
+    "action_smooth_alpha": 0.35,
+    "action_max_dq": 0.08,
+    "gravity_compensation": true,
+    "gravity_scale": 1.0,
+    "height_tolerance_m": 0.003
+  },
+  "height_by_task_m": {
+    "chrysanthemum": 0.065,
+    "red_dates": 0.15,
+    "lemon_slices": 0.145
+  }
+}

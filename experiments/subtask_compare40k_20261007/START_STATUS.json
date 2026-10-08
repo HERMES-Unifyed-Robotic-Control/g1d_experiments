@@ -1,0 +1,18 @@
+{
+  "remote_root": "/HOME/sysu_xdliang/sysu_xdliang_2/HDD_POOL/yangky/g1d_subtask_compare40k_20261007",
+  "queue_pid": 1439203,
+  "lora_pid": 1439204,
+  "lora_status": "complete at 40000",
+  "fullft_status": "complete at 40000",
+  "gpu": "A800 80GB single GPU",
+  "not_complete": false,
+  "latest_train_step": 40000,
+  "latest_validation_step": 40000,
+  "latest_validation_loss": 0.02020617015659809,
+  "tensorboard_url": "http://100.122.105.65:6024",
+  "tensorboard_writer_pid": 1677350,
+  "tensorboard_server_pid": 1688288,
+  "jump_tunnel_pid": 68136,
+  "tensorboard_tunnel_watch_pid": 160644,
+  "tensorboard_status": "HTTP200 verified 2026-10-08"
+}

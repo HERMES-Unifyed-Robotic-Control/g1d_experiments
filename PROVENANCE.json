@@ -1,0 +1,8 @@
+{
+  "baseline": "OpenPI pi05 LoRA step7500, NOT an EFT trained model",
+  "openpi_local_commit": "a32e57a3fabb8590c80677f9cd3d1fc3db60eb06",
+  "xr_local_commit": "9fadc51828243f373c61a113ee260f59377a9f6c",
+  "eft_commit": "fa65c7b29ef9489dc0c25d0a2f345b83ee85c49b",
+  "official_openpi_reference": "215abfb217dbac7d5f1273282331b9b1866c0479",
+  "snapshot_note": "Copies include local runtime modifications; provenance is not a claim of clean upstream tree."
+}

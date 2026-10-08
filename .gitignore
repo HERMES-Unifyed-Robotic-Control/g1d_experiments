@@ -1,0 +1,8 @@
+artifacts/
+.venv/
+__pycache__/
+*.pyc
+.env
+.env.*
+*.tar
+*.log

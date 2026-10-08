@@ -1,0 +1,6 @@
+﻿id,dataset,episode,episode_frames,subtask_index,object,start_frame,end_frame,num_frames,is_last,variant,text_en,text_zh
+g1d_food_sorting_123_episode_000000,g1d_food_sorting_123_lerobot,episode_000000,1814,1,move_black_cup,0,352,352,0,1,Move the black cup from the right side to the middle position.,将右侧的黑色杯子移动到中间位置。
+g1d_food_sorting_123_episode_000000,g1d_food_sorting_123_lerobot,episode_000000,1814,2,place_ingredient,352,1001,649,0,1,Place chrysanthemum into the black cup.,将菊花放入黑色杯子。
+g1d_food_sorting_123_episode_000000,g1d_food_sorting_123_lerobot,episode_000000,1814,3,left_hand_get_white_cup,1001,1313,312,0,1,Use the left hand to pick up the white cup on the left.,用左手拿起左侧的白色水杯。
+g1d_food_sorting_123_episode_000000,g1d_food_sorting_123_lerobot,episode_000000,1814,4,right_hand_hold_black_cup,1313,1475,162,0,1,Use the right hand to pick up and steady the black cup for pouring.,用右手拿起并稳住黑色杯子，准备倒水。
+g1d_food_sorting_123_episode_000000,g1d_food_sorting_123_lerobot,episode_000000,1814,5,pour_water,1475,1813,338,1,1,"Pour water from the white cup into the black cup, then return the robot to its home pose.",将白色水杯里的水倒入黑色杯子，完成后机器人姿态回正。

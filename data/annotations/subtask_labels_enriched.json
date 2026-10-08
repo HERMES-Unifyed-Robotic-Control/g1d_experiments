@@ -1,0 +1,84 @@
+{
+  "num_episodes": 1,
+  "num_subtasks": 5,
+  "num_variants": 1,
+  "home_pose_clause": {
+    "en": "then return the robot to its home pose",
+    "zh": "完成后机器人姿态回正"
+  },
+  "episodes": [
+    {
+      "id": "g1d_food_sorting_123_episode_000000",
+      "dataset": "g1d_food_sorting_123_lerobot",
+      "episode": "episode_000000",
+      "num_frames": 1814,
+      "fps": 30,
+      "instruction_en": "Move the black cup from the right to the middle, place chrysanthemum into it, then pour water from the white cup from the left into the black cup.",
+      "instruction_zh": "",
+      "grasp_order": [
+        "move_black_cup",
+        "place_ingredient",
+        "left_hand_get_white_cup",
+        "right_hand_hold_black_cup",
+        "pour_water"
+      ],
+      "subtasks": [
+        {
+          "index": 0,
+          "object": "move_black_cup",
+          "start_frame": 0,
+          "end_frame": 352,
+          "num_frames": 352,
+          "is_last": false,
+          "variant": 0,
+          "text_en": "Move the black cup from the right side to the middle position.",
+          "text_zh": "将右侧的黑色杯子移动到中间位置。"
+        },
+        {
+          "index": 1,
+          "object": "place_ingredient",
+          "start_frame": 352,
+          "end_frame": 1001,
+          "num_frames": 649,
+          "is_last": false,
+          "variant": 0,
+          "text_en": "Place chrysanthemum into the black cup.",
+          "text_zh": "将菊花放入黑色杯子。"
+        },
+        {
+          "index": 2,
+          "object": "left_hand_get_white_cup",
+          "start_frame": 1001,
+          "end_frame": 1313,
+          "num_frames": 312,
+          "is_last": false,
+          "variant": 0,
+          "text_en": "Use the left hand to pick up the white cup on the left.",
+          "text_zh": "用左手拿起左侧的白色水杯。"
+        },
+        {
+          "index": 3,
+          "object": "right_hand_hold_black_cup",
+          "start_frame": 1313,
+          "end_frame": 1475,
+          "num_frames": 162,
+          "is_last": false,
+          "variant": 0,
+          "text_en": "Use the right hand to pick up and steady the black cup for pouring.",
+          "text_zh": "用右手拿起并稳住黑色杯子，准备倒水。"
+        },
+        {
+          "index": 4,
+          "object": "pour_water",
+          "start_frame": 1475,
+          "end_frame": 1813,
+          "num_frames": 338,
+          "is_last": true,
+          "variant": 0,
+          "text_en": "Pour water from the white cup into the black cup, then return the robot to its home pose.",
+          "text_zh": "将白色水杯里的水倒入黑色杯子，完成后机器人姿态回正。"
+        }
+      ]
+    }
+  ]
+}

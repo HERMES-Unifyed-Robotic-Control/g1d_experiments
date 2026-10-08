@@ -1,0 +1,11 @@
+{
+  "dry_run_no_robot_commands": true,
+  "steps": 180,
+  "wall_time_s": 6.292130708694458,
+  "effective_waypoints_hz": 28.44823292571752,
+  "dt_ms_p50_p99": [
+    33.4620475769043,
+    50.00685691833496
+  ],
+  "max_dt_ms": 52.265167236328125
+}

@@ -1,0 +1,47 @@
+{
+  "id": "g1d_food_sorting_123_episode_000078",
+  "done": true,
+  "subtasks": [
+    {
+      "index": 0,
+      "object": "move_black_cup",
+      "text_en": "Move the black cup from the right side to the middle position.",
+      "text_zh": "将右侧的黑色杯子移动到中间位置。",
+      "start_frame": 0,
+      "end_frame": 210
+    },
+    {
+      "index": 1,
+      "object": "place_ingredient",
+      "text_en": "Place red dates into the black cup.",
+      "text_zh": "将红枣放入黑色杯子。",
+      "start_frame": 210,
+      "end_frame": 511
+    },
+    {
+      "index": 2,
+      "object": "left_hand_get_white_cup",
+      "text_en": "Use the left hand to pick up the white cup on the left.",
+      "text_zh": "用左手拿起左侧的白色水杯。",
+      "start_frame": 511,
+      "end_frame": 641
+    },
+    {
+      "index": 3,
+      "object": "right_hand_hold_black_cup",
+      "text_en": "Use the right hand to pick up and steady the black cup for pouring.",
+      "text_zh": "用右手拿起并稳住黑色杯子，准备倒水。",
+      "start_frame": 641,
+      "end_frame": 719
+    },
+    {
+      "index": 4,
+      "object": "pour_water",
+      "text_en": "Pour water from the white cup into the black cup.",
+      "text_zh": "将白色水杯里的水倒入黑色杯子。",
+      "start_frame": 719,
+      "end_frame": 973
+    }
+  ],
+  "updated_at": "2026-09-21T08:25:16.002Z"
+}

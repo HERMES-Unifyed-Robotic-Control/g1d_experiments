@@ -1,0 +1,65 @@
+{
+  "measured_state": {
+    "height_m": 0.0656643807888031,
+    "height_velocity_m_s": 0.0,
+    "height_age_s": 0.0175251760520041,
+    "arm_q": [
+      0.13990384340286255,
+      0.002241050126031041,
+      -0.001797633827663958,
+      0.753520131111145,
+      0.006807039957493544,
+      -0.896671712398529,
+      0.001761681167408824,
+      0.3064606189727783,
+      0.009371664375066757,
+      -0.012116051279008389,
+      0.6627036929130554,
+      -0.012559467926621437,
+      -0.9591694474220276,
+      0.03882889077067375
+    ],
+    "waist_yaw_rad": -0.006956842727959156,
+    "waist_pitch_rad": 0.0,
+    "lowstate_age_s": 0.0175251760520041
+  },
+  "gravity_tau_nm": [
+    -1.9706133290088068,
+    0.2214322629122027,
+    0.012278687232182863,
+    -2.4539636673715495,
+    -0.03210964869014479,
+    -1.2190711939864975,
+    0.007040651166741031,
+    -0.9608447512834732,
+    -0.21105043952052982,
+    -0.007260024484415875,
+    -2.323057852765784,
+    0.05335657186561277,
+    -1.2170532204829263,
+    -0.010854504649090711
+  ],
+  "gravity_model": {
+    "urdf": "/home/unitree/xr_teleoperate_g1d/assets/g1_D/g1_d.urdf",
+    "urdf_sha256": "0e06766885ae6342616cd636dffe858f3f063d14e526557edb6ff818342a0ed9",
+    "joint_order": [
+      "left_shoulder_pitch_joint",
+      "left_shoulder_roll_joint",
+      "left_shoulder_yaw_joint",
+      "left_elbow_joint",
+      "left_wrist_roll_joint",
+      "left_wrist_pitch_joint",
+      "left_wrist_yaw_joint",
+      "right_shoulder_pitch_joint",
+      "right_shoulder_roll_joint",
+      "right_shoulder_yaw_joint",
+      "right_elbow_joint",
+      "right_wrist_roll_joint",
+      "right_wrist_pitch_joint",
+      "right_wrist_yaw_joint"
+    ],
+    "scale": 1.0,
+    "method": "RNEA(q,0,0), other joints locked at zero"
+  },
+  "read_only": true
+}

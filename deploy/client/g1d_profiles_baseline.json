@@ -1,0 +1,53 @@
+{
+  "contract_version": "g1d-pi05-v1",
+  "official_reference": "215abfb217dbac7d5f1273282331b9b1866c0479",
+  "asset_id": "g1d_subtasks_train_v1",
+  "dataset": "g1d_subtasks_official_train_v1",
+  "profiles": {
+    "official": {
+      "config": "g1d_subtasks_pi05_official_lora_holdout_v1",
+      "training_config": "g1d_subtasks_pi05_official_lora_holdout_v1",
+      "checkpoint": "/mnt/data2/yangky/test/sys01_archive_20260930/old_runs/openpi-05-jax/g1d_subtasks_pi05_official_lora_holdout_v1/subtasks_official_lora_holdout_v1/7500",
+      "normalization": "official_quantile_unclipped",
+      "norm_stats_sha256": "5801d57c3c40374d7882ef4edbe2ebfa0e3d9a103ae18cb1fd679e79deb770b9",
+      "backend": "jax_lora",
+      "dataset": "/mnt/data/yangky/test/datasets/g1d_subtasks_official_train_v1",
+      "asset_id": "g1d_subtasks_train_v1",
+      "prompt_mode": "subtask",
+      "source": "20260926_success_baseline_lora7500_with_aligned_control"
+    }
+  },
+  "client": {
+    "policy_host": "192.168.10.116",
+    "policy_port": 9016,
+    "img_server_ip": "192.168.10.104",
+    "network_interface": "eth0",
+    "task": "chrysanthemum",
+    "prompt_mode": "subtask",
+    "subtask_schedule": "fixed",
+    "subtask_index": 0,
+    "steps": 3600,
+    "fps": 30,
+    "execute_chunk_steps": 8,
+    "initial_state": "current",
+    "max_arm_delta": 0.3,
+    "max_gripper_delta": 1.0,
+    "arm_velocity_limit": 30.0,
+    "disable_action_smoothing": false,
+    "waist_yaw_target": 0.0,
+    "async_prefetch": true,
+    "prefetch_remaining_steps": 4,
+    "interpolation_substeps": 4,
+    "chunk_blend_steps": 2,
+    "action_smooth_alpha": 0.35,
+    "action_max_dq": 0.08,
+    "gravity_compensation": true,
+    "gravity_scale": 1.0,
+    "height_tolerance_m": 0.003
+  },
+  "height_by_task_m": {
+    "chrysanthemum": 0.065,
+    "red_dates": 0.15,
+    "lemon_slices": 0.145
+  }
+}

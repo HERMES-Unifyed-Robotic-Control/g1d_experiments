@@ -1,0 +1,6 @@
+numpy
+pyarrow
+opencv-python-headless
+torch
+huggingface_hub
+PyYAML

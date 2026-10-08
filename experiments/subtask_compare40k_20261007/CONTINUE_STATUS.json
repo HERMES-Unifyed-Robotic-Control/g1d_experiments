@@ -1,0 +1,13 @@
+{
+  "queue_pid": 873611,
+  "lora_pid": 873612,
+  "writer_pid": 873610,
+  "from_step": 40000,
+  "target_step": 100000,
+  "active": "lora",
+  "phase": "startup/data preparation before confirmed optimizer continuation",
+  "queued": [
+    "fullft"
+  ],
+  "lr_after40k": 1e-06
+}
