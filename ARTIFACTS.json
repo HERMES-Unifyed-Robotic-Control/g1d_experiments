@@ -5,37 +5,38 @@
   "datasets": {
     "whole_197": {
       "path": "g1d_food_sorting/processed/whole_197.tar",
-      "revision": null,
+      "revision": "c10551923622f061f8e5795dc6e9c6a41e0dcf68",
       "sha256": "402bddf7657a13be69af90e63f7faf1ad9ce9850c1fe4acd1410534c90f4c481",
       "bytes": 6701445120,
-      "phase": "uploading"
+      "phase": "complete"
     },
     "subtasks_all": {
       "path": "g1d_food_sorting/processed/subtasks_all.tar",
-      "revision": null,
-      "sha256": null,
-      "bytes": null,
-      "phase": "pending"
+      "revision": "5e485fb9e0004fb3069da9d6347a6555f9d2a4b0",
+      "sha256": "94dc6ca0727a29b460e2a60d2a165aaa2a953766282babc62866856aa4ecab61",
+      "bytes": 4918067200,
+      "phase": "complete"
     },
     "subtasks_train": {
       "path": "g1d_food_sorting/processed/subtasks_train.tar",
-      "revision": null,
-      "sha256": null,
-      "bytes": null,
-      "phase": "pending"
+      "revision": "8686bd636e0d5ca8f23f9d79cbdc04992baf6f8e",
+      "sha256": "43e4ff1acedd8b87e06784ec4d55f5aafcd39c5eaf007484bd65ed44518e19ee",
+      "bytes": 4387512320,
+      "phase": "complete"
     },
     "subtasks_validation": {
       "path": "g1d_food_sorting/processed/subtasks_validation.tar",
-      "revision": null,
-      "sha256": null,
-      "bytes": null,
-      "phase": "pending"
+      "revision": "574932f11970267bcc0c9e775c57845b4c4a0055",
+      "sha256": "98f9b45433ed1aa108657cecd37f51643610c8aad267fe0ac325fb7c27dd05ca",
+      "bytes": 530677760,
+      "phase": "complete"
     }
   },
   "baseline": {
-    "revision": null,
+    "revision": "34b52faadba4e942fcffa6b4703de97ecd9d076a",
     "step": 7500,
-    "phase": "uploading"
+    "phase": "complete",
+    "repo": "yky666/g1d-pi05-subtask-baseline"
   },
   "comparisons": {}
 }
