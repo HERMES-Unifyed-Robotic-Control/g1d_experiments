@@ -2,7 +2,7 @@
 
 G1D 菊花、红枣、柠檬片任务的完整数据处理、subtask 标注、pi0.5 baseline、训练对照、真机执行和 Dexjoco C01 数据/decoder接口交付。**当前 baseline 为官方 OpenPI pi0.5 七个 subtask 的 LoRA step7500**，保留 2026-09-26 曾成功抓杯的权重；它是独立baseline，尚不是G1D C01权重。用户报告当前控制修正后的效果可用，但尚无系统闭环成功率统计。
 
-> 发布进行中：大型数据包/权重的完成状态以 `ARTIFACTS.json` 中 `phase=complete` 为准。标注已完成上传。
+> 标注、四个视频数据包和7500baseline均已上传并固定revision。比较权重尚未完成上传；以 `ARTIFACTS.json` 中 `phase=complete` 为准。
 
 ## 交付布局
 
@@ -70,7 +70,7 @@ CUDA_VISIBLE_DEVICES=0 python scripts/train_subtask.py --variant fullft --steps 
 
 可迁移入口复用已有训练/验证逻辑，数据、统计、batch1、无EMA、AdamW一阶动量bfloat16、seed42和学习率条件匹配。每2500步验证保存。续训保留原40k LR日程末值1e-6。原A800精确脚本创建记录见 `historical/compare_training/`，其机器路径是审计材料。
 
-交付的比较权重位于同一私有模型仓库 `comparisons/{lora,fullft}_{step}`，仅含推理params/assets，不包含optimizer续训状态。
+待上传的比较权重规划位于同一私有模型仓库 `comparisons/{lora,fullft}_{step}`，仅含推理params/assets，不包含optimizer续训状态。
 
 已完成的40k对照：LoRA validation loss0.0126283，full FT0.0122344；首步抓杯0.0141312/0.0142837。loss不是闭环成功率。100k续训状态见实验报告，其静态状态可能落后于训练进程；不要把未完成训练当作结果。
 
