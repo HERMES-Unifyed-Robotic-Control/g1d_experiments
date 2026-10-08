@@ -130,7 +130,7 @@ loader = DataLoader(G1DC01Windows('artifacts/data/g1d_subtasks_official_train_v1
 # π推理只消费batch['observation']；batch['supervision']仅用于E/损失监督
 ```
 
-**这不是已训练好的G1D C01 policy。** G1D state/action实测维数、train-only统计已完成；已实现视觉准备、E训练/cache导出、16D JAX decoder/pi桥接、GT-AUX校准、π训练及动作评估入口。运行流程见 [RUN_C01.md](experiments/g1d_c01_20261008/RUN_C01.md)。当前DINOv3访问403，需要实际权重才能启动；新入口未进行GPU运行验证。上游仿真C01检查点不能直接插到G1D执行。上游GT-AUX权重0.25628781345139295和finger-Δ权重0.05只是参考，不声称在G1D已校准或有效。详见[匹配说明](DEXJOCO_G1D_MATCHING.md)。本次没有启动新C01训练或真机评测。
+**这不是已训练好的G1D C01 policy。** G1D state/action实测维数、train-only统计已完成；已实现视觉准备、E训练/cache导出、16D JAX decoder/pi桥接、GT-AUX校准、π训练及动作评估入口。运行流程见 [RUN_C01.md](experiments/g1d_c01_20261008/RUN_C01.md)。DINOv3已通过Meta邮件授权下载，原生`.pth`加载与A800真实视频特征提取已运行。E30k→π LoRA40k队列已启动；尚无完成的C01策略或对比结果。上游仿真C01检查点不能直接插到G1D执行。上游GT-AUX权重0.25628781345139295和finger-Δ权重0.05只是参考，不声称在G1D已校准或有效。详见[匹配说明](DEXJOCO_G1D_MATCHING.md)。真机服务/独立H30客户端已实现，尚未执行真机动作。
 
 ## 进度评分（满分10）
 

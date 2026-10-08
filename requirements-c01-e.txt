@@ -1,0 +1,9 @@
+# Install in a separate Torch environment. Native DINO source is supplied separately.
+torch==2.7.1
+numpy==2.2.6
+pandas==2.2.3
+pyarrow==19.0.1
+av==16.1.0
+opencv-python-headless==4.11.0.86
+# Only needed when --dino points to a Transformers model directory.
+transformers>=4.56.0,<5

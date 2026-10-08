@@ -2,9 +2,9 @@ upstream:
   repository: HERMES-Unifyed-Robotic-Control/Dexjoco
   branch: zbk/c01-single-decoder-finger-delta
   commit: 90fa71f83c25b1ac0c5c4ba9676464015ba069b8
-status: training_entry_points_not_GPU_validated
+status: A800_E_training_running_pi_training_queued
 baseline: official_openpi_pi05_lora_step7500
-schema: g1d_c01_native16_v1
+schema: g1d_c01_native16_joint_response_v1
 dataset:
   train: artifacts/data/g1d_subtasks_official_train_v1
   validation: artifacts/data/g1d_subtasks_official_validation_v1
@@ -22,7 +22,7 @@ c01:
   response_protocol: g1d_measured_joint_delta_v1
   gripper_delta_indices: [14, 15]
   train_only_statistics: true
-  world_features_status: implemented_preparation_blocked_by_DINOv3_gated403
+  world_features_status: real_native_Meta_DINOv3_PCA_preparation_complete
   policy_bridge_status: native16_JAX_bridge_and_export_implemented_not_executed
 # H30 matches C01; official step7500 baseline independently uses H32.
 # Original C01 weights 0.25628781345139295/0.05 are references only;

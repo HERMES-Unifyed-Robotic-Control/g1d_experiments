@@ -10,9 +10,11 @@
 
 ## 状态和阻塞
 
-DINOv3 HF源`facebook/dinov3-vitb16-pretrain-lvd1689m`为gated repo。当前账号获取config返回403，本机只找到refs索引，没有实际权重。需要已有权重目录或授予访问权限，才能准备真实视觉目标。未用随机DINO、其他模型或伪世界特征代替。
+DINOv3已通过Meta邮件授权下载原生 `dinov3_vitb16_pretrain_lvd1689m-73cec8be.pth`，342860279 bytes，SHA256 `73cec8be7427c8655ceced13ce62f6e20a1fa90d1b4d4a550df17a1144081a7c`。不依赖HF gated访问。原生加载使用官方Meta源码commit `6876159a11b4df116f30f667f8c9888617df0751`，strict state_dict加载，ImageNet mean/std、224px、196×768 patch tokens。
 
-E/π代码入口已实现但尚未执行；GPU依赖、JAX decoder数值匹配、恢复和新模型的真机能力均未验证。没有新C01 loss或成功率结果。当前两张4090由推理服务占用；正式训练需可用GPU（建议A800），不自动停止现有服务。
+A800运行目录：`/HOME/sysu_xdliang/sysu_xdliang_2/HDD_POOL/yangky/g1d_c01_20261008`。已完成全部885 train/100 validation真实DINO/PCA/world目标；E30k已开始训练并输出loss，π训练及最终比较尚未开始。首次发现A800 OpenCV未编译FFmpeg，已安装PyAV16.1.0并改用PyAV精确帧解码。顺序队列为E30k→export→GT-AUX calibration→π LoRA40k→固定holdout评测。查看 `run/PIPELINE_STATUS.json`、`run/logs/*.log`、`logs/pipeline.log`。过程尚未完成，不能宣称有新的C01成功率或优于baseline的结果。
+
+新服务 `scripts/serve_c01.py` 与独立 `deploy/c01_client/` 使用H30/native16契约，保留baseline的高度、重力补偿、30Hz、异步预取/平滑配置。尚未执行真机动作，当前运行的baseline服务未改动。
 
 ## state与模型维数
 
@@ -39,14 +41,15 @@ E/π代码入口已实现但尚未执行；GPU依赖、JAX decoder数值匹配�
 export TRAIN=/absolute/path/g1d_subtasks_official_train_v1
 export VALIDATION=/absolute/path/g1d_subtasks_official_validation_v1
 export C01_RUN=/absolute/path/g1d_c01_run
-export C01_DINO=/absolute/path/dinov3-vitb16
+export C01_DINO=/absolute/path/dinov3_vitb16_pretrain_lvd1689m-73cec8be.pth
+export C01_DINO_SOURCE=/absolute/path/facebookresearch-dinov3-source
 export PI05_BASE=/absolute/path/pi05_base_jax/params
 export NORM_STATS=/absolute/path/baseline7500/assets/g1d_subtasks_train_v1/norm_stats.json
 export PYTHONPATH="$PWD:$PWD/vendor/openpi/src:$PWD/vendor/openpi/src/openpi/openpi-client/src"
 export XLA_PYTHON_CLIENT_PREALLOCATE=false
 
 python scripts/prepare_c01_statistics.py --train "$TRAIN" --validation "$VALIDATION" --output "$C01_RUN/normalization"
-CUDA_VISIBLE_DEVICES=0 python scripts/prepare_c01_visual.py --train "$TRAIN" --validation "$VALIDATION" --dino "$C01_DINO" --output "$C01_RUN/evidence"
+CUDA_VISIBLE_DEVICES=0 python scripts/prepare_c01_visual.py --train "$TRAIN" --validation "$VALIDATION" --dino "$C01_DINO" --dino-source "$C01_DINO_SOURCE" --output "$C01_RUN/evidence"
 CUDA_VISIBLE_DEVICES=0 python scripts/train_c01_e.py --train "$TRAIN" --validation "$VALIDATION" --evidence "$C01_RUN/evidence" --statistics "$C01_RUN/normalization/statistics.json" --output "$C01_RUN/E" --steps 30000
 # 恢复E：同一命令增加 --resume
 CUDA_VISIBLE_DEVICES=0 python scripts/export_c01_e.py --checkpoint "$C01_RUN/E/best.pt" --train "$TRAIN" --validation "$VALIDATION" --evidence "$C01_RUN/evidence" --output "$C01_RUN/cache"
@@ -68,4 +71,28 @@ E视觉目标当前只取egocentric，与上游单视图world协议对应；π�
 
 C01离线入口推理前删除全部未来监督，只传当前图像、tokenized16D state、32D padded state、prompt。输出必须为H30×16D物理qpos。
 
-holdout曾用于选checkpoint，不是独立测试集。C01是H30，baseline是H32；动作误差对比需统一anchor与前30步、噪声/去噪协议，不能直接将不同horizon的汇总MAE当作严格同条件结果。真机评测还需为C01新契约增加client/server profile和H30接入；在此之前不能把C01输出接到H32 baseline服务。不得自动执行真机动作。
+holdout曾用于选checkpoint，不是独立测试集。C01是H30，baseline是H32；动作误差对比需统一anchor与前30步、噪声/去噪协议，不能直接将不同horizon的汇总MAE当作严格同条件结果。已加入独立C01 H30服务/client profile。训练完成后需先完成离线评测、server/client契约检查，再由用户启动真机执行。不能把C01输出接到H32 baseline服务。
+
+## baseline7500 离线比较
+
+`evaluate_c01_pi.py`直接读取仓库 `data/validation_samples.json` 的200个固定anchor；噪声采用与baseline相同的逐观测 `numpy.default_rng(20260924+i)` 标准正态协议，但latent维数不同，不能声称噪声张量相同。默认10次去噪。`compare_c01_baseline.py`检查固定anchor、task、物理GT逐值一致，只比较双方前30步，并按两臂、两夹爪及task汇总。
+
+```bash
+python scripts/compare_c01_baseline.py --baseline /path/to/baseline7500/heldout_predictions.npz --c01 "$C01_RUN/evaluation/predictions.npz" --output "$C01_RUN/comparison/baseline7500_vs_c01.json"
+```
+
+7500 baseline和C01 40k存在训练预算差异；后续可另加相同步数π0.5作为消融。原200观测的baseline产物来自 `pi05_official_holdout`，checkpoint路径以 `/7500` 结尾；复制时保留SHA256 provenance。
+
+## 训练后的真机入口（尚未启动）
+
+```bash
+python scripts/serve_c01.py --checkpoint /path/to/pi_lora/checkpoints/SELECTED_STEP --cache "$C01_RUN/cache" --port 9021
+```
+
+服务启动成功后，将 `deploy/c01_client/`（包括更新后的profile JSON）同步到G1D独立目录，并使用同一版本openpi-client图像处理代码。保持已有baseline目录作为对照。首先执行 `./run_client_on_g1d.sh --check-server-only`，成功后再使用用户已有的环境变量启动格式和 `--execute`；C01端口为9021。profile中的checkpoint占位在实际服务加载完成前不可用于执行。
+
+## A800 数据一致性修复
+
+首次视觉准备已完成全部885个train episode；validation episode36解码失败。对全部3952个视频/parquet/meta文件进行SHA256核对，仅validation36 egocentric视频存在传输截断：A8002588672 bytes，本地完整3208496 bytes。完整原文件SHA256为 `1cbeb2bd68106bba514855cdd63b8cbd891b5db6fd7afd82070ece7ffefb782d`。
+
+已建立运行目录下独立 `data/` 硬链接副本；修复文件通过原子替换解除共享inode，未修改baseline数据目录。其余3951文件SHA256一致，修复文件SHA256已复核。原统计量SHA256也与sys01完全一致。运行目录保留 `INPUT_CHECK_BEFORE_REPAIR.json`、`INPUT_CHECK.json` 和 `DATA_RELOCATION.json`，明确记录缓存复用和路径迁移依据。

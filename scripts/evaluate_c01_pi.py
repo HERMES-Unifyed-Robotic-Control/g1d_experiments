@@ -15,23 +15,22 @@ if a.variant=='fullft':v.update(paligemma_variant='gemma_2b',action_expert_varia
 model=G1DC01PiConfig(**v).load(model_lib.restore_params(a.params));model.eval();data=G1DPiData(a.validation,a.cache,'validation',a.norm_stats)
 # Runtime model receives only current images, normalized32D token state and language.
 @jax.jit
-def infer(obs,raw,key):
- effect=model.sample_actions(key,obs,num_steps=a.denoise_steps)
+def infer(obs,raw,key,noise):
+ effect=model.sample_actions(key,obs,num_steps=a.denoise_steps,noise=noise)
  return model.decoder.physical(effect*model.effect_std.value+model.effect_mean.value,raw)
-fixed=[];off=0
-for ep in data.episodes:
- for fraction in (.25,.75):fixed.append((off+int(max(0,ep['length']-32)*fraction),ep['task_index']))
- off+=ep['length']
+anchors=json.loads((ROOT/'data/validation_samples.json').read_text())
+fixed=list(zip(anchors['indices'],anchors['task_indices']))
 errors=[];preds=[];targets=[];tasks=[]
 for i,(index,task) in enumerate(fixed):
  sample=data.sample(index);truth=sample['target_actions'];valid=sample['action_valid'];raw=sample['raw_state'][None]
  # Strip supervision before creating the inference Observation.
  obs=model_lib.Observation(**{k:jax.tree.map(lambda x:x[None],sample[k]) for k in ('images','image_masks','state','tokenized_prompt','tokenized_prompt_mask')})
- pred=np.asarray(infer(obs,raw,jax.random.fold_in(jax.random.key(20260924),i)))[0]
+ noise=np.random.default_rng(20260924+i).standard_normal((1,30,256),dtype=np.float32)
+ pred=np.asarray(infer(obs,raw,jax.random.key(20260924+i),noise))[0]
  if pred.shape!=(30,16) or not np.isfinite(pred).all():raise ValueError('C01 decoder output violated16D contract')
  errors.append(np.where(valid[:,None],pred-truth,np.nan));preds.append(pred);targets.append(truth);tasks.append(task)
 e=np.stack(errors);tasks=np.asarray(tasks)
 def metrics(x):return {'mae':float(np.nanmean(np.abs(x))),'rmse':float(np.sqrt(np.nanmean(x*x))),'per_dim_mae':np.nanmean(np.abs(x),axis=(0,1)).tolist(),'horizon_mae':np.nanmean(np.abs(x),axis=(0,2)).tolist()}
-a.output.mkdir(parents=True,exist_ok=True);report={'params':str(a.params),'variant':a.variant,'observations':len(e),'horizon':30,'native_state_dim':16,'action_dim':16,'overall':metrics(e),'per_task':{str(t):metrics(e[tasks==t]) for t in sorted(set(tasks))},'limitation':'Selected holdout, not independent test set; compare baseline first30 of32 horizon with same anchors/noise protocol; not closed-loop success'}
-(a.output/'action_metrics.json').write_text(json.dumps(report,indent=2)+'\n');np.savez_compressed(a.output/'predictions.npz',predictions=np.stack(preds),targets=np.stack(targets),task_indices=tasks)
+a.output.mkdir(parents=True,exist_ok=True);report={'params':str(a.params),'variant':a.variant,'observations':len(e),'horizon':30,'native_state_dim':16,'action_dim':16,'denoise_steps':a.denoise_steps,'noise_protocol':'numpy.default_rng(20260924 + observation_index), standard_normal_float32; different latent dimensions','anchor_sha256':hashlib.sha256((ROOT/'data/validation_samples.json').read_bytes()).hexdigest(),'overall':metrics(e),'per_task':{str(t):metrics(e[tasks==t]) for t in sorted(set(tasks))},'limitation':'Selected holdout, not independent test set; compare baseline first30 of32 horizon with same anchors/noise protocol; not closed-loop success'}
+(a.output/'action_metrics.json').write_text(json.dumps(report,indent=2)+'\n');np.savez_compressed(a.output/'predictions.npz',predictions=np.stack(preds),targets=np.stack(targets),task_indices=tasks,indices=np.asarray(anchors['indices']),action_valid=np.isfinite(e).all(-1))
 print(json.dumps(report,indent=2))

@@ -47,7 +47,7 @@ python scripts/evaluate_subtask.py --checkpoint artifacts/baseline/7500 --varian
 `supervision`: action/state_future/joint_response `[B,30,16]`、valid `[B,30]`。
 RGB uint8；state/action为物理单位。H30@30Hz；三视图按egocentric,left_wrist,right_wrist排列。未来数据只能用于E/损失监督，不进入π推理。
 
-原22/44D末端+灵巧手动作不等于G1D的双臂14关节+2夹爪。不能靠补零、切片或转换名称来直接部署原C01权重。已提供原生16D数据/decoder/GT-AUX和gripper-Δ组件；已加入G1D视觉准备、E训练/cache导出、原生16D JAX/pi桥接、GT-AUX校准、π训练与动作评估入口；运行顺序见 [RUN_C01.md](experiments/g1d_c01_20261008/RUN_C01.md)。当前DINOv3权重访问403，尚未启动E/π训练；新入口尚未GPU运行验证。
+原22/44D末端+灵巧手动作不等于G1D的双臂14关节+2夹爪。不能靠补零、切片或转换名称来直接部署原C01权重。已提供原生16D数据/decoder/GT-AUX和gripper-Δ组件；已加入G1D视觉准备、E训练/cache导出、原生16D JAX/pi桥接、GT-AUX校准、π训练与动作评估入口；运行顺序见 [RUN_C01.md](experiments/g1d_c01_20261008/RUN_C01.md)。DINOv3原生权重已就绪，A800已开始真实视觉特征准备，队列随后运行E30k与π LoRA40k；没有完成的C01评测结果。
 
 ## 5. 权重与证据
 

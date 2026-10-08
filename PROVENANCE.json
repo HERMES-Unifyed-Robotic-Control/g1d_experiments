@@ -11,5 +11,13 @@
     "branch": "zbk/c01-single-decoder-finger-delta",
     "commit": "90fa71f83c25b1ac0c5c4ba9676464015ba069b8"
   },
-  "c01_g1d_status": "native16 train/evaluation entry points implemented; statistics prepared; E/pi training blocked by DINOv3 gated403, not GPU-validated"
+  "c01_g1d_status": "A800 real DINOv3/PCA evidence complete; native16 E30k training running; pi LoRA40k/calibration/evaluation/comparison queued; no C01 deployment or success-rate results",
+  "dinov3": {
+    "architecture": "ViT-B/16 LVD1689M",
+    "sha256": "73cec8be7427c8655ceced13ce62f6e20a1fa90d1b4d4a550df17a1144081a7c",
+    "bytes": 342860279,
+    "source_commit": "6876159a11b4df116f30f667f8c9888617df0751",
+    "source_repository": "https://github.com/facebookresearch/dinov3",
+    "weight_distribution": "not bundled; obtain via Meta authorization"
+  }
 }
