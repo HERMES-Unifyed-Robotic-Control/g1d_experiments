@@ -2,7 +2,7 @@
 
 G1D 菊花、红枣、柠檬片任务的完整数据处理、subtask 标注、pi0.5 baseline、训练对照、真机执行和 Dexjoco C01 数据/decoder接口交付。**当前 baseline 为官方 OpenPI pi0.5 七个 subtask 的 LoRA step7500**，保留 2026-09-26 曾成功抓杯的权重；它是独立baseline，尚不是G1D C01权重。用户报告当前控制修正后的效果可用，但尚无系统闭环成功率统计。
 
-> 标注、四个视频数据包和7500baseline均已上传并固定revision。比较权重尚未完成上传；以 `ARTIFACTS.json` 中 `phase=complete` 为准。
+> 标注、四个视频数据包和7500baseline均已上传并固定revision。比较权重受A800网络/跳板断线影响尚未完成上传；以 `ARTIFACTS.json` 中 `phase=complete` 为准。
 
 ## 交付布局
 

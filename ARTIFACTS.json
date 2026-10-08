@@ -38,5 +38,30 @@
     "phase": "complete",
     "repo": "yky666/g1d-pi05-subtask-baseline"
   },
-  "comparisons": {}
+  "comparisons": {
+    "lora_40000": {
+      "phase": "blocked",
+      "revision": null,
+      "path": "comparisons/lora_40000",
+      "reason": "A800 cannot resolve Hugging Face directly; reverse proxy disconnected repeatedly before commit"
+    },
+    "fullft_40000": {
+      "phase": "blocked",
+      "revision": null,
+      "path": "comparisons/fullft_40000",
+      "reason": "A800 cannot resolve Hugging Face directly; reverse proxy disconnected repeatedly before commit"
+    },
+    "lora_85000": {
+      "phase": "blocked",
+      "revision": null,
+      "path": "comparisons/lora_85000",
+      "reason": "A800 cannot resolve Hugging Face directly; reverse proxy disconnected repeatedly before commit"
+    },
+    "fullft_75000": {
+      "phase": "blocked",
+      "revision": null,
+      "path": "comparisons/fullft_75000",
+      "reason": "A800 cannot resolve Hugging Face directly; reverse proxy disconnected repeatedly before commit"
+    }
+  }
 }
