@@ -43,7 +43,7 @@ Baseline模型仓库为私有：[yky666/g1d-pi05-subtask-baseline](https://huggi
 
 ## 安装baseline环境
 
-运行时参考Python3.12、JAX0.5.3/CUDA、Flax NNX、Orbax、LeRobot v2.1生态。`requirements-baseline-sys01.txt` 记录当前sys01核心运行依赖版本；其中LeRobot为0.1.0/v2.1数据生态，不能直接替换成最新版本。`vendor/openpi/pyproject.toml` 是历史PSI工程配置（Python3.10），不是本次Python3.12 JAX baseline的安装入口。训练关键模块是vendored `openpi`。按上述版本安装运行依赖及对应CUDA支持，再加源码路径：
+A800训练使用Python3.12；当前sys01推理环境为Python3.10.20，核心为JAX0.5.3/CUDA、Flax NNX、Orbax、LeRobot v2.1生态。`requirements-baseline-sys01.txt` 记录当前sys01核心运行依赖版本；其中LeRobot为0.1.0/v2.1数据生态，不能直接替换成最新版本。`vendor/openpi/pyproject.toml` 是历史PSI工程配置（Python3.10），不是本次Python3.12 JAX baseline的安装入口。训练关键模块是vendored `openpi`。按上述版本安装运行依赖及对应CUDA支持，再加源码路径：
 
 ```bash
 export PSI_HOME="$PWD/vendor/openpi"
@@ -89,7 +89,7 @@ python scripts/evaluate_subtask.py --checkpoint artifacts/comparisons/fullft_400
 python scripts/serve_baseline.py --checkpoint artifacts/baseline/7500 --port 9016
 ```
 
-此入口会将`deploy/client/g1d_profiles_baseline.json`的checkpoint字段更新为实际路径，以绑定准确契约。将生成后的同一client目录复制到G1D；修改URDF路径、Python解释器及XR_TELEOP_ROOT后部署。保持server/client源码、profile、norm stats的hash一致，不绕过metadata验证。
+此入口会将`deploy/client/g1d_profiles_baseline.json`的checkpoint字段更新为实际路径，以绑定准确契约。将生成后的同一client目录复制到G1D；通过PYTHON_BIN指定解释器，并修改URDF路径及XR_TELEOP_ROOT后部署。G1D还需Unitree SDK2/Python、Pinocchio、相机服务及openpi-client；升降示例源代码与SDK commit见`deploy/height_control/`。在目标G1D编译height_control，人工安装`install_height_permissions.sh`中的三种精确高度/停止权限。保持server/client源码、profile、norm stats的hash一致，不绕过metadata验证。
 
 现场G1D指令（保持原目录和机器网络）：
 

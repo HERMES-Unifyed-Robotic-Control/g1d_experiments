@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Run manually on G1D with sudo. Adds only the two demonstrated task heights.
+# Run manually on G1D with sudo. Adds only the three configured task heights.
 set -euo pipefail
 if [[ ${EUID} -ne 0 ]]; then
   echo 'Run on G1D: sudo bash ./install_height_permissions.sh' >&2
@@ -11,6 +11,7 @@ command -v visudo >/dev/null
 stage=$(mktemp -d /tmp/g1d-task-heights.XXXXXX)
 trap 'rm -rf "$stage"' EXIT
 cat > "$stage/sudoers" <<'RULES'
+unitree ALL=(root) NOPASSWD: /home/unitree/unitree_sdk2/build/bin/g1d_height_control eth0 0.065
 unitree ALL=(root) NOPASSWD: /home/unitree/unitree_sdk2/build/bin/g1d_height_control eth0 0.150
 unitree ALL=(root) NOPASSWD: /home/unitree/unitree_sdk2/build/bin/g1d_height_control eth0 0.145
 unitree ALL=(root) NOPASSWD: /usr/local/sbin/g1d_height_control_stop
