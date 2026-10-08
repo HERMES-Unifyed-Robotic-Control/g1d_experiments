@@ -73,6 +73,16 @@ CUDA_VISIBLE_DEVICES=0 python scripts/train_subtask.py --variant fullft --steps 
 
 已完成的40k对照：LoRA validation loss0.0126283，full FT0.0122344；首步抓杯0.0141312/0.0142837。loss不是闭环成功率。100k续训状态见实验报告，其静态状态可能落后于训练进程；不要把未完成训练当作结果。
 
+## 固定holdout离线评估
+
+```bash
+python scripts/evaluate_subtask.py --checkpoint artifacts/baseline/7500 --variant lora --output artifacts/evaluation/baseline7500
+python scripts/download_artifacts.py --comparison fullft_40000
+python scripts/evaluate_subtask.py --checkpoint artifacts/comparisons/fullft_40000 --variant fullft --output artifacts/evaluation/fullft40000
+```
+
+使用相同200条观测、固定采样噪声种子，输出16D物理动作MAE/RMSE、逐task/关节/时间步误差及预测npz。MAE混合不同关节维度，比较时看逐维指标；该holdout曾用于选ckpt，不能作为独立测试集或真机成功率。本次交付没有重新运行评估。
+
 ## baseline服务和真机
 
 ```bash
@@ -98,12 +108,14 @@ RECORD_DIR="/home/unitree/pi05_g1d_deploy_alignment_20261007/rollouts/baseline75
 
 [EFT](https://github.com/HERMES-Unifyed-Robotic-Control/EFT-Embodied-Future-Transitions) 的当前版本是RoboCasa骨架，多处`NotImplementedError`，不能声称已有可评测EFT policy。本交付固定上游commit并提供G1D数据适配，未伪造EFT训练结果或权重。
 
-适配器输入仅包含`inputs.rgb_history/state_history/language`；未来图像/状态/动作只在`targets`中，不得传入U predictor。RGB为未归一化uint8，编码器需完成自身normalization。历史4帧/0.5s；G1D按30Hz保留1.5s未来窗口H45，三路视图。官方baseline独立使用H32；两种horizon不可混淆。窗口不跨episode/subtask边界，训练/验证继承原episode分组划分。
+适配器输入仅包含`inputs.rgb_history/state_history/language`；未来图像/状态/动作只在`targets`中，不得传入U predictor。RGB为未归一化uint8，状态/动作保留原始物理单位，编码器需完成自身normalization（统计只能从train拟合）。历史4帧/0.5s；G1D按30Hz保留1.5s未来窗口H45，三路视图。官方baseline独立使用H32；两种horizon不可混淆。窗口不跨episode/subtask边界，训练/验证继承原episode分组划分。
 
 ```python
-from g1d_experiments.eft_dataset import G1DPredictiveWindowDataset
+from torch.utils.data import DataLoader
+from g1d_experiments.eft_dataset import G1DPredictiveWindowDataset, collate_g1d_windows
 train = G1DPredictiveWindowDataset('artifacts/data/g1d_subtasks_official_train_v1')
-# sample = train[i]; EFT预测器只消费sample['inputs']
+loader = DataLoader(train, batch_size=1, collate_fn=collate_g1d_windows)
+# EFT预测器只消费batch['inputs']；targets仅供训练损失
 ```
 
 要测师兄的EFT模型，还需接入实际实现后的编码器/U predictor/动作头、其检查点与输入输出协议，再在同一holdout及真实起始条件下比较。本次没有新增模型训练或真机评测。

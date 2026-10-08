@@ -1,0 +1,110 @@
+{
+  "g1d_contract.json": {
+    "bytes": 2674,
+    "sha256": "2409a948792f432b76e7dca639e737d630b4af7b40be9a411c1b769c2ebbb093"
+  },
+  "_CHECKPOINT_METADATA": {
+    "bytes": 426,
+    "sha256": "a89d92a22defa9d46226ca614c55578453120f158dc20758bfc8db574da387d1"
+  },
+  "params/_METADATA": {
+    "bytes": 33008,
+    "sha256": "e39e9b1da59619ef7276ab45fcc359278b70779db3225963806b0e2edb4b1952"
+  },
+  "params/_sharding": {
+    "bytes": 19574,
+    "sha256": "9bfe32ed6fce5e065109a8be2f9b2354db605bdccedbe6ad4d8f72e44b5993a6"
+  },
+  "params/manifest.ocdbt": {
+    "bytes": 118,
+    "sha256": "8e20a9d04f1039070d4fde22247be15d0daa403bb38349f86851edf3a967be6f"
+  },
+  "train_state/_METADATA": {
+    "bytes": 60195,
+    "sha256": "da9a8840b183fdaf5e371c67253b4623f5e36aea9c049ccc75228b5ba13f2197"
+  },
+  "train_state/_sharding": {
+    "bytes": 30166,
+    "sha256": "39880fb05c16aa075f645d6d2a1e3a6d6a330d680135d14f4e5f2f93110462d6"
+  },
+  "train_state/manifest.ocdbt": {
+    "bytes": 118,
+    "sha256": "2f345f5cfb6cb3e196457ff9e0171246c65e64d0f485da04483709cc8084e8da"
+  },
+  "train_state/d/3b02c4cb6c8c7655a087897ecf0ec596": {
+    "bytes": 3471,
+    "sha256": "f3c3f222cc36fde2c048d41c2141a5f0f87763ef9145b7edc1f04c192243c4af"
+  },
+  "train_state/ocdbt.process_0/manifest.ocdbt": {
+    "bytes": 260,
+    "sha256": "9487721112aa658dbc549476abcd7cff1ad2e71dd175f281d16b0f0d78cccf42"
+  },
+  "train_state/array_metadatas/process_0": {
+    "bytes": 19801,
+    "sha256": "2cc2e888a7766745b1d66759a2729037b890ad295f68de3ed7440b2b3461dc93"
+  },
+  "train_state/ocdbt.process_0/d/1c202a0a98d1f66504629e174732531b": {
+    "bytes": 171,
+    "sha256": "4322e96cd3829e98d2a117a6ec7128cdaa27f5f3a65c63fc53133c63c1413e9b"
+  },
+  "train_state/ocdbt.process_0/d/665a898f20c2b3515ceb542b5f6444cd": {
+    "bytes": 925294592,
+    "sha256": "ed42e2bc489999efbf3d4af3a3aa0e786b19a6884a2e308e6815dd9de148803d"
+  },
+  "train_state/ocdbt.process_0/d/92d0f4d80dde9057669b0b1f0e68b6c8": {
+    "bytes": 1241,
+    "sha256": "26db11338004ffdb4a1da636d2256470117f9da201aa231ce5b8aa2aa4bbcfe6"
+  },
+  "train_state/ocdbt.process_0/d/cc2e55ecfcfab342040e878986313671": {
+    "bytes": 1214,
+    "sha256": "75c888d7e480466aa967d005ef65cade44b5da870384f0034c365b0553f70607"
+  },
+  "train_state/ocdbt.process_0/d/21d2797d072df746b70a457b8a102489": {
+    "bytes": 2285850624,
+    "sha256": "baa35783e94fa83508149e8c6183c00401be8c3ca1ec8cc756387daf8db133c4"
+  },
+  "params/d/99d780ac87866ecad89810b29f4f2f54": {
+    "bytes": 4199,
+    "sha256": "1614c557e6545ca303418a4b983a6d75c8566ddaef214f665e60d174d78c568a"
+  },
+  "params/ocdbt.process_0/manifest.ocdbt": {
+    "bytes": 312,
+    "sha256": "5322da7e6907f06e8c8c70731b7a6c80a247c45739301474bc8675ab252ec5ce"
+  },
+  "params/array_metadatas/process_0": {
+    "bytes": 12804,
+    "sha256": "4bc18cbaeb3658e3e450726efe1c6990c91ee6d092718c5818c88a7e6dc61538"
+  },
+  "params/ocdbt.process_0/d/07eb3ed2210ead6016a4fe0bbc907a91": {
+    "bytes": 945623040,
+    "sha256": "a8fffdd51601856088c2e25d4a17c495a000b8742589491cee92736050749a29"
+  },
+  "params/ocdbt.process_0/d/bf61d5d178b88388f7ea445fd632bb1c": {
+    "bytes": 2720428032,
+    "sha256": "0a5e0889b5be6b8a4e90859efab71efa1caa8a1988f61b09f34e4ce95d8a73f7"
+  },
+  "params/ocdbt.process_0/d/5781e2100d81376012c6a5833d03b6c8": {
+    "bytes": 5855,
+    "sha256": "69abcbb2854f363c8fd27d474e6306aee9bb7209a6717105f52189c2dd80131f"
+  },
+  "params/ocdbt.process_0/d/bdcff650c0b5caf9a2ebcc34673adc9c": {
+    "bytes": 1433,
+    "sha256": "5e04077d3fe289ae0f81d5d7a5818dbf5b751188dabb52df1ea1216912b91734"
+  },
+  "params/ocdbt.process_0/d/ed8c4d224134bc537485032345efe819": {
+    "bytes": 219,
+    "sha256": "2291c82a77115e1b38a94d245570ce162f40c50e1fafa3deaeb6c6f6ae1c499c"
+  },
+  "params/ocdbt.process_0/d/4359d3207f09064adb21a292feeb1d79": {
+    "bytes": 2194718720,
+    "sha256": "bcbfac4209699d2bc8e7adb616c21bb8fa317be165bc08c0547686f3a169719b"
+  },
+  "params/ocdbt.process_0/d/a4094a5a6de38073576eb64b130759ff": {
+    "bytes": 474533888,
+    "sha256": "68b18427c4f49a1caf45c57ec9d46fc15d4be7c02db43b3e2806a8d1f51f97c3"
+  },
+  "assets/g1d_subtasks_train_v1/norm_stats.json": {
+    "bytes": 3908,
+    "sha256": "5801d57c3c40374d7882ef4edbe2ebfa0e3d9a103ae18cb1fd679e79deb770b9"
+  }
+}

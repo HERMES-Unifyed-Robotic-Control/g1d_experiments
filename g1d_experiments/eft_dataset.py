@@ -55,3 +55,15 @@ class G1DPredictiveWindowDataset(Dataset):
                            'action_future':action[t:t+self.horizon]},
                 'metadata':{'episode_index':ep,'anchor_frame':t,'source_episode_index':entry.get('source_episode_index',ep),
                             'fps':self.info['fps'],'views':VIEWS}}
+
+
+def collate_g1d_windows(samples):
+    """Batch tensors without merging future supervision into predictor inputs."""
+    import torch
+    def stack(group,key):
+        return torch.from_numpy(np.stack([sample[group][key] for sample in samples]))
+    return {'inputs':{'rgb_history':stack('inputs','rgb_history'),
+                      'state_history':stack('inputs','state_history'),
+                      'language':[sample['inputs']['language'] for sample in samples]},
+            'targets':{key:stack('targets',key) for key in ('rgb_future','state_future','action_future')},
+            'metadata':[sample['metadata'] for sample in samples]}

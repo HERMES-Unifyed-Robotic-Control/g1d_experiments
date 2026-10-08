@@ -2,7 +2,7 @@
 from pathlib import Path
 import argparse,json,hashlib,tarfile
 from huggingface_hub import hf_hub_download,snapshot_download
-p=argparse.ArgumentParser();p.add_argument('--output',type=Path,default=Path('artifacts'));p.add_argument('--baseline',action='store_true');p.add_argument('--dataset',choices=['whole_197','subtasks_all','subtasks_train','subtasks_validation'],action='append');a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--output',type=Path,default=Path('artifacts'));p.add_argument('--baseline',action='store_true');p.add_argument('--comparison',action='append');p.add_argument('--dataset',choices=['whole_197','subtasks_all','subtasks_train','subtasks_validation'],action='append');a=p.parse_args()
 m=json.loads((Path(__file__).parents[1]/'ARTIFACTS.json').read_text());a.output.mkdir(exist_ok=True,parents=True)
 for name in a.dataset or []:
  e=m['datasets'][name]
@@ -16,3 +16,8 @@ for name in a.dataset or []:
 if a.baseline:
  if not m['baseline'].get('revision'):raise RuntimeError('Baseline upload pending; update repository after completion')
  snapshot_download(m['model_repo'],revision=m['baseline']['revision'],allow_patterns=['7500/**'],local_dir=a.output/'baseline')
+
+for name in a.comparison or []:
+ e=m["comparisons"].get(name)
+ if not e or not e.get("revision"):raise RuntimeError("Comparison not yet published: "+name)
+ snapshot_download(m["model_repo"],revision=e["revision"],allow_patterns=[e["path"]+"/**"],local_dir=a.output)
