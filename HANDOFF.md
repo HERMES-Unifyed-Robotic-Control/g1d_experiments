@@ -14,7 +14,7 @@ python scripts/download_artifacts.py --dataset subtasks_train --dataset subtasks
 
 ## 2. 跑当前baseline
 
-当前baseline是官方OpenPI pi05 LoRA step7500，不是EFT。安装环境见README，固定200条holdout观测的离线动作评估：
+当前baseline是官方OpenPI pi05 LoRA step7500，尚不是G1D C01 policy。安装环境见README，固定200条holdout观测的离线动作评估：
 
 ```bash
 python scripts/evaluate_subtask.py --checkpoint artifacts/baseline/7500 --variant lora
@@ -24,20 +24,15 @@ python scripts/evaluate_subtask.py --checkpoint artifacts/baseline/7500 --varian
 
 真机服务入口 `scripts/serve_baseline.py`，客户端 `deploy/client/`。先核对server/client契约，再按真实场景准备原子起点。当前五阶段仍人工切换，没有自动完成标志。Baseline现场的重力补偿、高度与异步预取配置已保留。
 
-## 3. 接入师兄的EFT模型
+## 3. 接入Dexjoco C01模型
 
-```python
-from torch.utils.data import DataLoader
-from g1d_experiments.eft_dataset import G1DPredictiveWindowDataset, collate_g1d_windows
-loader = DataLoader(G1DPredictiveWindowDataset('artifacts/data/g1d_subtasks_official_train_v1'),
-                    batch_size=1, collate_fn=collate_g1d_windows)
-```
+参考固定到指定分支与commit，见PROVENANCE.json和DEXJOCO_G1D_MATCHING.md。接口入口为 `g1d_experiments.c01_dataset.G1DC01Windows` / `collate_c01_windows`，16D decoder为 `g1d_experiments.c01_decoder.G1DC01Decoder`。
 
-`inputs`: RGB历史 `[B,4,3,3,224,224]`（time,view,channel）、状态 `[B,4,16]`、语言list。
-`targets`: RGB未来 `[B,45,3,3,224,224]`、未来状态/动作 `[B,45,16]`。
-RGB uint8；state/action为物理单位。历史0.5s，未来1.5s，30Hz；三视图按egocentric,left_wrist,right_wrist排列。未来数据只能进入监督损失，不能输入U predictor。
+`observation`: RGB `[B,3,3,224,224]`（view,channel）、state `[B,16]`、prompt list。
+`supervision`: action/state_future/joint_response `[B,30,16]`、valid `[B,30]`。
+RGB uint8；state/action为物理单位。H30@30Hz；三视图按egocentric,left_wrist,right_wrist排列。未来数据只能用于E/损失监督，不进入π推理。
 
-公开EFT上游当前仍是未实现的骨架，本交付提供数据匹配，没有EFT训练权重。真实模型评测需要师兄提供实现分支、检查点与normalization/动作头协议。
+原22/44D末端+灵巧手动作不等于G1D的双臂14关节+2夹爪。不能靠补零、切片或转换名称来直接部署原C01权重。已提供原生16D数据/decoder/GT-AUX和gripper-Δ组件；还需G1D视觉特征、E训练/cache、JAX/pi桥接与策略训练。这些尚未执行，当前只有OpenPI7500baseline能按已知契约服务。
 
 ## 4. 权重与证据
 

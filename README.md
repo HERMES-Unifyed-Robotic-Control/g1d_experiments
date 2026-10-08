@@ -1,6 +1,6 @@
 # G1D Food Sorting Experiments
 
-G1D 菊花、红枣、柠檬片任务的完整数据处理、subtask 标注、pi0.5 baseline、训练对照、真机执行和 EFT 数据接口交付。**当前 baseline 为官方 OpenPI pi0.5 七个 subtask 的 LoRA step7500**，保留 2026-09-26 曾成功抓杯的权重；不是 EFT 权重。用户报告当前控制修正后的效果可用，但尚无系统闭环成功率统计。
+G1D 菊花、红枣、柠檬片任务的完整数据处理、subtask 标注、pi0.5 baseline、训练对照、真机执行和 Dexjoco C01 数据/decoder接口交付。**当前 baseline 为官方 OpenPI pi0.5 七个 subtask 的 LoRA step7500**，保留 2026-09-26 曾成功抓杯的权重；它是独立baseline，尚不是G1D C01权重。用户报告当前控制修正后的效果可用，但尚无系统闭环成功率统计。
 
 > 发布进行中：大型数据包/权重的完成状态以 `ARTIFACTS.json` 中 `phase=complete` 为准。标注已完成上传。
 
@@ -12,11 +12,12 @@ G1D 菊花、红枣、柠檬片任务的完整数据处理、subtask 标注、pi
 |`scripts/`|数据/权重下载、可迁移的baseline服务、同条件LoRA/full FT训练|
 |`deploy/client/`|当前真机客户端：高度实测、重力补偿、连续插值、异步预取、人工N切换|
 |`deploy/server/`|现有sys01服务管理与契约，路径含现场机器布局|
-|`g1d_experiments/eft_dataset.py`|LeRobot到EFT历史输入/未来监督适配器|
-|`configs/eft_g1d.yaml`|三路视图、16D状态/动作、30Hz的EFT实验数据配置|
+|`g1d_experiments/c01_dataset.py`|G1D原生16D的C01窗口接口，推理观测与离线监督分开|
+|`g1d_experiments/c01_decoder.py`|复用C01架构的16D decoder与GT-AUX/gripper-Δ组件|
+|`configs/c01_g1d.yaml`|C01 G1D接口与尚需完成的训练环节|
 |`vendor/openpi/`|运行时OpenPI/PSI源码快照及原LICENSE、依赖配置|
 |`vendor/xr_teleoperate_g1d/`|G1D控制、相机、URDF/mesh及原LICENSE|
-|`third_party/eft/`|固定版本的EFT上游submodule|
+|`third_party/dexjoco/`|指定C01分支、固定commit的Dexjoco submodule|
 |`historical/`|原始转换/训练脚本和现场创建训练队列脚本；不是所有脚本都可无参数迁移|
 |`experiments/`|关键审计、训练配置、部署说明、时序诊断与历史状态|
 |`ARTIFACTS.json`|Hugging Face revision、SHA256、下载定位|
@@ -104,21 +105,32 @@ RECORD_DIR="/home/unitree/pi05_g1d_deploy_alignment_20261007/rollouts/baseline75
 
 先以`--check-server-only`核对契约。固定原子阶段时不按N；只有已确认当前阶段完成后才人工推进。高度按TASK为0.065/0.150/0.145m，是升降机构目标而非夹爪离桌距离。原子起点/GO_READY细节见`experiments/subtask_atomic_20261007/RUN_ATOMIC.md`。当前没有自动成功判定/自动终止输出。
 
-## EFT匹配：已完成接口，训练仍依赖上游实现
+## Dexjoco C01匹配（已按用户更正）
 
-[EFT](https://github.com/HERMES-Unifyed-Robotic-Control/EFT-Embodied-Future-Transitions) 的当前版本是RoboCasa骨架，多处`NotImplementedError`，不能声称已有可评测EFT policy。本交付固定上游commit并提供G1D数据适配，未伪造EFT训练结果或权重。
+模型参考改为 [Dexjoco `zbk/c01-single-decoder-finger-delta`](https://github.com/HERMES-Unifyed-Robotic-Control/Dexjoco/tree/zbk/c01-single-decoder-finger-delta)，commit `90fa71f83c25b1ac0c5c4ba9676464015ba069b8`。该分支提供C01 E训练/导出、π0.5单decoder+GT-AUX+finger-Δ训练及评测。之前的EFT接口已撤下。
 
-适配器输入仅包含`inputs.rgb_history/state_history/language`；未来图像/状态/动作只在`targets`中，不得传入U predictor。RGB为未归一化uint8，状态/动作保留原始物理单位，编码器需完成自身normalization（统计只能从train拟合）。历史4帧/0.5s；G1D按30Hz保留1.5s未来窗口H45，三路视图。官方baseline独立使用H32；两种horizon不可混淆。窗口不跨episode/subtask边界，训练/验证继承原episode分组划分。
+|接口|上游C01|G1D匹配|
+|---|---|---|
+|动作/状态|单臂22/23D、双臂44/46D；末端位姿+16指关节/手|16/16D，双臂绝对qpos+两个夹爪电机|
+|动作头|单臂、双臂头|新增原生16D头，不能复用44D输出层|
+|E序列|30×256|保留30×256接口，G1D的E需要重新生成并训练|
+|时间|30Hz、H30|30Hz、H30；7500baseline另为H32|
+|finger-Δ|每手16维手指|对应夹爪维度14、15的gripper-Δ|
+|机器人响应|FK根位姿、4指尖、16指关节/手|组件提供实测16D关节响应；这是G1D适配变体，不是原FK目标|
+|视觉|指定仿真视图与DINO/PCA世界变化特征|三路真实RGB；DINO与train-only PCA需按G1D重新准备|
+|划分|原11任务100episode规则|沿用177/20原episode分组，不套用0–89/90–99|
+
+已实现G1D H30窗口、16D状态/动作、仅相邻有效帧参与的gripper-Δ损失，以及复用上游ActionDecoder架构的16D decoder组件。RGB为uint8，状态/动作为物理单位。统计量需从train拟合。缺失的触觉、指尖或世界特征不会补零后冒充实测有效数据。
 
 ```python
 from torch.utils.data import DataLoader
-from g1d_experiments.eft_dataset import G1DPredictiveWindowDataset, collate_g1d_windows
-train = G1DPredictiveWindowDataset('artifacts/data/g1d_subtasks_official_train_v1')
-loader = DataLoader(train, batch_size=1, collate_fn=collate_g1d_windows)
-# EFT预测器只消费batch['inputs']；targets仅供训练损失
+from g1d_experiments.c01_dataset import G1DC01Windows, collate_c01_windows
+loader = DataLoader(G1DC01Windows('artifacts/data/g1d_subtasks_official_train_v1'),
+                    batch_size=1, collate_fn=collate_c01_windows)
+# π推理只消费batch['observation']；batch['supervision']仅用于E/损失监督
 ```
 
-要测师兄的EFT模型，还需接入实际实现后的编码器/U predictor/动作头、其检查点与输入输出协议，再在同一holdout及真实起始条件下比较。本次没有新增模型训练或真机评测。
+**这不是已训练好的G1D C01 policy。** 仍需G1D DINO/world特征、train统计/PCA、原生16D E训练/cache、JAX decoder导出与pi桥接、G1D GT-AUX校准及策略训练。上游仿真C01检查点不能直接插到G1D执行。上游GT-AUX权重0.25628781345139295和finger-Δ权重0.05只是参考，不声称在G1D已校准或有效。详见[匹配说明](DEXJOCO_G1D_MATCHING.md)。本次没有启动新C01训练或真机评测。
 
 ## 进度评分（满分10）
 
@@ -139,4 +151,4 @@ loader = DataLoader(train, batch_size=1, collate_fn=collate_g1d_windows)
 
 历史机器路径、旧服务状态作为证据保留，当前默认baseline7500与修正后的客户端。已去除源码中的凭据字面量，不包含SSH配置、账户密码或token。未运行新增测试；数据/权重上传完成后记录HF不可变revision和校验值。
 
-vendor保留各上游许可证；数据沿用既有HF dataset card。EFT上游未附许可证时不推定其许可，使用其submodule和模型前确认上游授权。GitHub代码、HF数据及私有模型权限独立管理。
+vendor保留各上游许可证；数据沿用既有HF dataset card。Dexjoco及第三方组件遵循其原许可证。GitHub代码、HF数据及私有模型权限独立管理。

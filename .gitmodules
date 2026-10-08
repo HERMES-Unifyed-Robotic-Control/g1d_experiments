@@ -1,3 +1,4 @@
-[submodule "third_party/eft"]
-	path = third_party/eft
-	url = https://github.com/HERMES-Unifyed-Robotic-Control/EFT-Embodied-Future-Transitions.git
+[submodule "third_party/dexjoco"]
+	path = third_party/dexjoco
+	url = https://github.com/HERMES-Unifyed-Robotic-Control/Dexjoco.git
+	branch = zbk/c01-single-decoder-finger-delta

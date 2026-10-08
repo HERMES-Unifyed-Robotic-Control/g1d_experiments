@@ -1,11 +1,15 @@
 {
-  "baseline": "OpenPI pi05 LoRA step7500, NOT an EFT trained model",
+  "baseline": "Official OpenPI pi05 LoRA step7500; independent from Dexjoco C01",
   "openpi_local_commit": "a32e57a3fabb8590c80677f9cd3d1fc3db60eb06",
   "xr_local_commit": "9fadc51828243f373c61a113ee260f59377a9f6c",
-  "eft_commit": "fa65c7b29ef9489dc0c25d0a2f345b83ee85c49b",
   "official_openpi_reference": "215abfb217dbac7d5f1273282331b9b1866c0479",
   "snapshot_note": "Copies include local runtime modifications; provenance is not a claim of clean upstream tree.",
   "unitree_sdk2_commit": "9754cd153af3da471b0fe5f3aa535e426fb11db3",
   "baseline_file_manifest": "data/baseline7500_file_manifest.json",
-  "eft_adapter_status": "data interface only; upstream model/training unfinished"
+  "model_reference": {
+    "repository": "HERMES-Unifyed-Robotic-Control/Dexjoco",
+    "branch": "zbk/c01-single-decoder-finger-delta",
+    "commit": "90fa71f83c25b1ac0c5c4ba9676464015ba069b8"
+  },
+  "c01_g1d_status": "native16 dataset/decoder/loss components; E/pi training not performed"
 }
