@@ -39,3 +39,5 @@ Decoder构造要求训练集产生的state_mean/std、action_mean/std；不接�
 6. 训练G1D C01 π；在相同holdout和真实起始条件下与7500baseline比较，记录人工切换/介入、progress/10与成功率。
 
 本次完成数据和decoder/损失组件交付，没有运行上述新E/π训练、组件测试或真机评测。上游11任务51.64%等结果属于仿真任务与原检查点，不是G1D结果。
+
+图像适配保留RGB、224×224 PIL bilinear resize-with-pad，与当前OpenPI客户端一致；C01 backbone自身normalization仍需按其协议执行。

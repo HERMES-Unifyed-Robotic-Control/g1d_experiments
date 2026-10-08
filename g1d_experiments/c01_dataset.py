@@ -8,6 +8,9 @@ import json
 import numpy as np
 import pyarrow.parquet as pq
 import cv2
+import sys
+sys.path.insert(0,str(Path(__file__).parents[1]/"vendor/openpi/src/openpi/openpi-client/src"))
+from openpi_client.image_tools import resize_with_pad
 from torch.utils.data import Dataset
 VIEWS=('egocentric','left_wrist','right_wrist')
 class G1DC01Windows(Dataset):
@@ -26,10 +29,8 @@ class G1DC01Windows(Dataset):
         try:
             cap.set(cv2.CAP_PROP_POS_FRAMES,t);ok,bgr=cap.read()
             if not ok:raise RuntimeError(f'Missing frame: {ep}/{view}/{t}')
-            rgb=cv2.cvtColor(bgr,cv2.COLOR_BGR2RGB);h,w=rgb.shape[:2];scale=self.image_size/max(h,w)
-            rgb=cv2.resize(rgb,(round(w*scale),round(h*scale)));out=np.zeros((self.image_size,self.image_size,3),np.uint8)
-            y=(self.image_size-rgb.shape[0])//2;x=(self.image_size-rgb.shape[1])//2;out[y:y+rgb.shape[0],x:x+rgb.shape[1]]=rgb
-            return out.transpose(2,0,1)
+            rgb=cv2.cvtColor(bgr,cv2.COLOR_BGR2RGB)
+            return resize_with_pad(rgb,self.image_size,self.image_size).transpose(2,0,1)
         finally:cap.release()
     def __getitem__(self,i):
         ep,t=self.index[i];table=pq.read_table(self.path(self.info['data_path'],ep),columns=['observation.state','action','task_index'])
