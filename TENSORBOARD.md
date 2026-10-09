@@ -24,7 +24,7 @@ tmux new-window -t g1d_c01_tb -n server \
   "$PYTHON -m tensorboard.main --logdir $C01_ROOT/tensorboard --bind_all --load_fast=false --port 6008 > $C01_ROOT/monitoring/server.log 2>&1"
 ```
 
-A100使用`--stages pi_lora_dp2_40k`和端口6009。启动命令用于新部署；当前服务已经运行，请不要重复启动。普通加载模式避开本环境快速加载的曲线请求超时。回填时同一步采用JSONL最后一条记录；后续发现回退/恢复训练时写入TensorBoard session start以清除该步之后的旧曲线。
+A100全量FT使用`--stages pi_fullft_dp2_100k`和端口6009。启动命令用于新部署；当前服务已经运行，请不要重复启动。普通加载模式避开本环境快速加载的曲线请求超时。回填时同一步采用JSONL最后一条记录；后续发现回退/恢复训练时写入TensorBoard session start以清除该步之后的旧曲线。
 
 ## 在任一A100上查看文件传输
 
@@ -61,4 +61,4 @@ A100页面选择run `asset_transfer`。每5秒记录`transfer/verified_percent`�
 
 ## 40k续训100k
 
-A800同一6008入口选择`pi_lora_100k/train`与`pi_lora_100k/validation`；旧40k历史已回填，后续日志增加学习率。续训协议及自动评测见[RUN_CONTINUE_100K.md](experiments/g1d_c01_20261008/RUN_CONTINUE_100K.md)。A100当前是policy LoRA40k，全局batch2，选择`pi_lora_dp2_40k/train`，验证每2500步记录。
+A800同一6008入口选择`pi_lora_100k/train`与`pi_lora_100k/validation`；旧40k历史已回填，后续日志增加学习率。续训协议及自动评测见[RUN_CONTINUE_100K.md](experiments/g1d_c01_20261008/RUN_CONTINUE_100K.md)。A100已切换为policy全量FT100k，全局batch2，选择`pi_fullft_dp2_100k/train`与`pi_fullft_dp2_100k/validation`，验证每2500步记录。旧`pi_lora_dp2_40k`曲线保留用于追溯，已经停止训练。
