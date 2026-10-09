@@ -54,3 +54,7 @@ done
 cat "$C01_ROOT/run/RANK0_STATUS.json" "$C01_ROOT/run/RANK1_STATUS.json"
 tail -f "$C01_ROOT/run_rank0_auto.log" "$C01_ROOT/run_rank1_auto.log"
 ```
+
+## 传输指标曲线
+
+A100页面选择run `asset_transfer`。每5秒记录`transfer/verified_percent`、`transfer/inflight_GB`、`transfer/retry_attempt`和状态年龄等。训练曲线只有真正进入训练后才有；传输指标不是模型loss。脚本为`scripts/transfer_to_tensorboard.py`，部署在817588xt25的`g1d_c01_tb:transfer_metrics`窗口。

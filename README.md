@@ -156,3 +156,5 @@ vendor保留各上游许可证；数据沿用既有HF dataset card。Dexjoco及�
 ## 训练监控
 
 TensorBoard访问、tmux后台会话、文件迁移进度指令见[TENSORBOARD.md](TENSORBOARD.md)。C01训练JSONL通过`scripts/jsonl_to_tensorboard.py`持续导出，不重启训练。
+
+E/π、训练监督和在线推理链路说明见[MODEL_GUIDE.md](MODEL_GUIDE.md)。
