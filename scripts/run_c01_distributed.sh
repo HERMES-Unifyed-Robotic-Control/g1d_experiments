@@ -23,7 +23,10 @@ while True:
     if sync.exists():
         data=json.loads(sync.read_text())
         if data['state']=='failed':
-            status('asset_sync_failed');raise SystemExit(data['error'])
+            retry=root/'AUTO_SYNC_RETRY_STATUS.json'
+            auto=json.loads(retry.read_text()) if retry.exists() else {}
+            if not (auto.get('active') and time.time()-auto.get('updated_unix',0)<60):
+                status('asset_sync_failed');raise SystemExit(data['error'])
         if data['state']=='complete' and marker.exists():break
     time.sleep(15)
 for rank in (0,1):
