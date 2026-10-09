@@ -158,3 +158,7 @@ vendor保留各上游许可证；数据沿用既有HF dataset card。Dexjoco及�
 TensorBoard访问、tmux后台会话、文件迁移进度指令见[TENSORBOARD.md](TENSORBOARD.md)。C01训练JSONL通过`scripts/jsonl_to_tensorboard.py`持续导出，不重启训练。
 
 E/π、训练监督和在线推理链路说明见[MODEL_GUIDE.md](MODEL_GUIDE.md)。
+
+## C01首轮A800 40k结果
+
+E30k与π LoRA40k已完成，选中π40000。200个holdout观测、前30步native16动作误差对比与独立G1D客户端入口见[首轮结果](experiments/g1d_c01_20261008/results_a800_40k/README.md)。MAE下降11.60%，RMSE下降16.14%；尚未进行该权重的真机成功率评测。A100迁移完成后已启动双实例LoRA训练，global batch2。

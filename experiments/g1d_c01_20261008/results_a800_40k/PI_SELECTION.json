@@ -1,0 +1,10 @@
+{
+  "step": 40000,
+  "observations": 200,
+  "effect_loss": 0.35453201938420537,
+  "gripper_delta": 0.017607367094024086,
+  "gtaux": 0.01124319766255212,
+  "loss": 0.3629367731139064,
+  "ramp": 1.0,
+  "selection": "minimum heldout composite loss; not independent test"
+}

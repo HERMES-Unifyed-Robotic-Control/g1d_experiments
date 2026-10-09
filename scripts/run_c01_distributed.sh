@@ -29,8 +29,8 @@ while True:
                 status('asset_sync_failed');raise SystemExit(data['error'])
         if data['state']=='complete' and marker.exists():break
     time.sleep(15)
-for rank in (0,1):
-    assert json.loads((root/f'COLLECTIVE_RANK{rank}.json').read_text())['success']
+for checked_rank in (0,1):
+    assert json.loads((root/f'COLLECTIVE_RANK{checked_rank}.json').read_text())['success']
 status('starting_distributed_training')
 PY
 unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY ALL_PROXY all_proxy ftp_proxy FTP_PROXY no_proxy NO_PROXY SL_PROXY_ADDR

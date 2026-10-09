@@ -11,6 +11,7 @@ sys.path[:0] = [str(ROOT), str(ROOT/'vendor/openpi/src'), str(ROOT/'vendor/openp
 import jax
 import numpy as np
 from openpi.models import model as model_lib
+from openpi.shared import nnx_utils
 from openpi.training import config
 from openpi.serving.websocket_policy_server import WebsocketPolicyServer
 from openpi_client import image_tools
@@ -23,6 +24,7 @@ p.add_argument('--cache', type=Path, required=True)
 p.add_argument('--port', type=int, default=9021)
 p.add_argument('--variant', choices=['lora', 'fullft'], default='lora')
 p.add_argument('--denoise-steps', type=int, default=10)
+p.add_argument('--warmup', action='store_true', help='Compile with synthetic observations before accepting clients')
 a = p.parse_args()
 cp = a.checkpoint.resolve()
 stats = cp/'assets/g1d_subtasks_train_v1/norm_stats.json'
@@ -41,10 +43,11 @@ model = G1DC01PiConfig(**values).load(model_lib.restore_params(cp/'params'))
 model.eval()
 inputs = G1DPolicyInputs(stats)
 
-@jax.jit
+sample_effect = nnx_utils.module_jit(model.sample_actions)
+decode_actions = nnx_utils.module_jit(model.decoder.physical)
 def predict(obs, raw, key):
-    effect = model.sample_actions(key, obs, num_steps=a.denoise_steps)
-    return model.decoder.physical(effect*model.effect_std.value+model.effect_mean.value, raw)
+    effect = sample_effect(key, obs, num_steps=a.denoise_steps)
+    return decode_actions(effect*model.effect_std.value+model.effect_mean.value, raw)
 
 class C01Policy:
     def __init__(self): self.key = jax.random.key(42); self.lock = threading.Lock()
@@ -75,4 +78,12 @@ meta = dict(contract_version='g1d-c01-native16-v1', profile='official', dataset=
     runtime_helper_sha256=sha(client/'robot_alignment.py'), image_tools_sha256=sha(image_tools.__file__),
     codec_sha256=manifest['checkpoint_sha256'], decoder_init_sha256=manifest['decoder_sha256'],
     denoise_steps=a.denoise_steps, raw_state_dim=16, padded_state_dim=32)
-WebsocketPolicyServer(C01Policy(), host='0.0.0.0', port=a.port, metadata=meta).serve_forever()
+policy = C01Policy()
+if a.warmup:
+    dummy = {'state': np.zeros(16, np.float32), 'prompt': 'Move the black cup from the right to the middle.'}
+    for name in ('observation/base_image', 'observation/left_wrist_image', 'observation/right_wrist_image'):
+        dummy[name] = np.zeros((224, 224, 3), np.uint8)
+    print('Compiling C01 inference before accepting clients', flush=True)
+    policy.infer(dummy)
+    print('C01 inference warmup complete', flush=True)
+WebsocketPolicyServer(policy, host='0.0.0.0', port=a.port, metadata=meta).serve_forever()
