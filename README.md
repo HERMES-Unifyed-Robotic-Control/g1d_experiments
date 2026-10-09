@@ -152,3 +152,7 @@ loader = DataLoader(G1DC01Windows('artifacts/data/g1d_subtasks_official_train_v1
 历史机器路径、旧服务状态作为证据保留，当前默认baseline7500与修正后的客户端。已去除源码中的凭据字面量，不包含SSH配置、账户密码或token。未运行新增测试；数据/权重上传完成后记录HF不可变revision和校验值。
 
 vendor保留各上游许可证；数据沿用既有HF dataset card。Dexjoco及第三方组件遵循其原许可证。GitHub代码、HF数据及私有模型权限独立管理。
+
+## 训练监控
+
+TensorBoard访问、tmux后台会话、文件迁移进度指令见[TENSORBOARD.md](TENSORBOARD.md)。C01训练JSONL通过`scripts/jsonl_to_tensorboard.py`持续导出，不重启训练。
