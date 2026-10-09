@@ -96,3 +96,11 @@ python scripts/serve_c01.py --checkpoint /path/to/pi_lora/checkpoints/SELECTED_S
 首次视觉准备已完成全部885个train episode；validation episode36解码失败。对全部3952个视频/parquet/meta文件进行SHA256核对，仅validation36 egocentric视频存在传输截断：A8002588672 bytes，本地完整3208496 bytes。完整原文件SHA256为 `1cbeb2bd68106bba514855cdd63b8cbd891b5db6fd7afd82070ece7ffefb782d`。
 
 已建立运行目录下独立 `data/` 硬链接副本；修复文件通过原子替换解除共享inode，未修改baseline数据目录。其余3951文件SHA256一致，修复文件SHA256已复核。原统计量SHA256也与sys01完全一致。运行目录保留 `INPUT_CHECK_BEFORE_REPAIR.json`、`INPUT_CHECK.json` 和 `DATA_RELOCATION.json`，明确记录缓存复用和路径迁移依据。
+
+## 2026-10-09 进度检查
+
+E30k于10月8日22:50（Asia/Shanghai）完成，最佳step30000。200观测验证loss=0.1000007024，action=0.0003459838，response=0.0014352506，world=0.4968383479。这是E的归一化重建/监督损失，不是π闭环成功率。E缓存于22:54完整导出。
+
+队列于22:55因π环境缺augmax停止，π当时没有开始训练。10月9日补齐实际入口需要的augmax、beartype、Orbax辅助依赖、Transformers/tokenizers、numpydantic/Pydantic等，并恢复校准；不会重训E。PaliGemma tokenizer沿用已有本地模型，SHA256与sys01 baseline一致：`8986bb4f423f07f8c7f70d0dbe3526fb2316056c17bae71b1ea975e77a168fc6`。启动与恢复脚本保存在A800运行根目录 `resume_pipeline.sh`，失败阶段会写入 `PIPELINE_STATUS.json`，不能把队列已提交误认为π已训练完成。
+
+2026-10-09 09:38（Asia/Shanghai）：GT-AUX 校准已通过，16个训练样本输出梯度比的中位数为0.0756023861，所选权重为1.3227095743；校准不执行优化器更新。队列已进入π LoRA 40000步阶段，模型已加载，正在等待首次编译/实际训练指标。最终holdout评测和baseline7500对比尚未完成。
