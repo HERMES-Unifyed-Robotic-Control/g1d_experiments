@@ -104,3 +104,5 @@ E30k于10月8日22:50（Asia/Shanghai）完成，最佳step30000。200观测验�
 队列于22:55因π环境缺augmax停止，π当时没有开始训练。10月9日补齐实际入口需要的augmax、beartype、Orbax辅助依赖、Transformers/tokenizers、numpydantic/Pydantic等，并恢复校准；不会重训E。PaliGemma tokenizer沿用已有本地模型，SHA256与sys01 baseline一致：`8986bb4f423f07f8c7f70d0dbe3526fb2316056c17bae71b1ea975e77a168fc6`。启动与恢复脚本保存在A800运行根目录 `resume_pipeline.sh`，失败阶段会写入 `PIPELINE_STATUS.json`，不能把队列已提交误认为π已训练完成。
 
 2026-10-09 09:38（Asia/Shanghai）：GT-AUX 校准已通过，16个训练样本输出梯度比的中位数为0.0756023861，所选权重为1.3227095743；校准不执行优化器更新。队列已进入π LoRA 40000步阶段，模型已加载，正在等待首次编译/实际训练指标。最终holdout评测和baseline7500对比尚未完成。
+
+2026-10-09：A100 pytorch-ng-992446有240GiB RAM（available232GiB）、2×A10080GB，容器盘160GB空闲且HOME/workspace实写12MiB成功；指定Storage01持久化目录仍报EDQUOT，按用户指示继续在原A800运行。A800 π首次达到2500，200观测validation loss1.3847066134，但Orbax0.11.1缺CommitFutureAwaitingContractedSignals导致首个checkpoint未提交，无可可靠续训的cursor。已安装与sys01一致的Orbax0.11.13，失败产物保留为run/pi_lora_failed_save_20261009_2500，重新开始π；E和缓存、校准结果全部复用。最终评测及真机部署尚未执行。
