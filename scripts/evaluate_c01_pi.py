@@ -7,6 +7,7 @@ import numpy as np
 import jax
 from openpi.training import config
 from openpi.models import model as model_lib
+from openpi.shared import nnx_utils
 from g1d_experiments.c01_pi import G1DC01PiConfig
 from g1d_experiments.c01_pi_data import G1DPiData
 p=argparse.ArgumentParser();p.add_argument('--params',type=Path,required=True);p.add_argument('--cache',type=Path,required=True);p.add_argument('--validation',type=Path,required=True);p.add_argument('--norm-stats',type=Path,required=True);p.add_argument('--variant',choices=['lora','fullft'],default='lora');p.add_argument('--output',type=Path,required=True);p.add_argument('--denoise-steps',type=int,default=10);a=p.parse_args()
@@ -14,10 +15,11 @@ base=config.get_config('g1d_subtasks_pi05_official_lora_holdout_v1');v=dataclass
 if a.variant=='fullft':v.update(paligemma_variant='gemma_2b',action_expert_variant='gemma_300m')
 model=G1DC01PiConfig(**v).load(model_lib.restore_params(a.params));model.eval();data=G1DPiData(a.validation,a.cache,'validation',a.norm_stats)
 # Runtime model receives only current images, normalized32D token state and language.
-@jax.jit
+sample_effect=nnx_utils.module_jit(model.sample_actions)
+decode_actions=nnx_utils.module_jit(model.decoder.physical)
 def infer(obs,raw,key,noise):
- effect=model.sample_actions(key,obs,num_steps=a.denoise_steps,noise=noise)
- return model.decoder.physical(effect*model.effect_std.value+model.effect_mean.value,raw)
+ effect=sample_effect(key,obs,num_steps=a.denoise_steps,noise=noise)
+ return decode_actions(effect*model.effect_std.value+model.effect_mean.value,raw)
 anchors=json.loads((ROOT/'data/validation_samples.json').read_text())
 fixed=list(zip(anchors['indices'],anchors['task_indices']))
 errors=[];preds=[];targets=[];tasks=[]

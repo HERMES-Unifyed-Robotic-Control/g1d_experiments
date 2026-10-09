@@ -58,3 +58,7 @@ tail -f "$C01_ROOT/run_rank0_auto.log" "$C01_ROOT/run_rank1_auto.log"
 ## 传输指标曲线
 
 A100页面选择run `asset_transfer`。每5秒记录`transfer/verified_percent`、`transfer/inflight_GB`、`transfer/retry_attempt`和状态年龄等。训练曲线只有真正进入训练后才有；传输指标不是模型loss。脚本为`scripts/transfer_to_tensorboard.py`，部署在817588xt25的`g1d_c01_tb:transfer_metrics`窗口。
+
+## 40k续训100k
+
+A800同一6008入口选择`pi_lora_100k/train`与`pi_lora_100k/validation`；旧40k历史已回填，后续日志增加学习率。续训协议及自动评测见[RUN_CONTINUE_100K.md](experiments/g1d_c01_20261008/RUN_CONTINUE_100K.md)。A100当前是policy LoRA40k，全局batch2，选择`pi_lora_dp2_40k/train`，验证每2500步记录。

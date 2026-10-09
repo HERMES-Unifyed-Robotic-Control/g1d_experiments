@@ -59,6 +59,7 @@ def step_fn(state,batch):
  params=state.params.filter(cfg.trainable_filter);updates,opt=state.tx.update(grads,state.opt_state,params)
  def scale(path,value):return value*.25 if 'decoder' in str(path) else value
  updates=jax.tree_util.tree_map_with_path(scale,updates);nnx.update(m,optax.apply_updates(params,updates));return dataclasses.replace(state,step=state.step+1,params=nnx.state(m),opt_state=opt),dict(metrics,grad_norm=optax.global_norm(grads))
+learning_rate=cfg.lr_schedule.create()
 step_jit=jax.jit(step_fn,in_shardings=(state_sharding,ds),out_shardings=(state_sharding,repl),donate_argnums=(0,))
 if a.calibrate_only:
  def measure(st,batch,key):
@@ -77,7 +78,7 @@ eval_jit=jax.jit(evaluate)
 while int(state.step)<a.steps:
  batch=distributed.batch(train,rng.integers(0,len(train),a.batch_size),ds);state,metrics=step_jit(state,batch);step=int(state.step)
  if step%10==0:
-  record={'step':step,**{k:float(v) for k,v in jax.device_get(metrics).items()}}
+  record={'step':step,'lr':float(learning_rate(step-1)),**{k:float(v) for k,v in jax.device_get(metrics).items()}}
   if not all(np.isfinite(v) for v in record.values()):raise FloatingPointError('Nonfinite pi metrics')
   distributed.append_json(a.output/'training_metrics.jsonl',record)
   if jax.process_index()==0:print(json.dumps(record),flush=True)
