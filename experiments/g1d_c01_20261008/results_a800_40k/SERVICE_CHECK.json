@@ -1,0 +1,30 @@
+{
+  "input": "synthetic zero images/state; connectivity and shape only; no robot commands",
+  "checks": [
+    {
+      "request": 0,
+      "seconds": 0.3808068629587069,
+      "shape": [
+        30,
+        16
+      ],
+      "finite": true,
+      "server_timing": {
+        "infer_ms": 113.69943991303444
+      }
+    },
+    {
+      "request": 1,
+      "seconds": 0.4370454450836405,
+      "shape": [
+        30,
+        16
+      ],
+      "finite": true,
+      "server_timing": {
+        "infer_ms": 89.7973501123488,
+        "prev_total_ms": 344.3158579757437
+      }
+    }
+  ]
+}
