@@ -61,6 +61,7 @@ if not (policy/'TRAINING_COMPLETE.json').exists():
     if list(policy.glob('cursor_*.json')): args += ['--resume']
     run('pi_lora', a.jax_python, 'train_c01_pi.py', args)
 records = [json.loads(s) for s in (policy/'validation_metrics.jsonl').read_text().splitlines()]
+records = [row for row in records if (policy/'checkpoints'/str(row['step'])/'params').is_dir()]
 best = min(records, key=lambda row: row['loss'])
 (a.output/'PI_SELECTION.json').write_text(json.dumps(dict(best, selection='minimum heldout composite loss; not independent test'), indent=2)+'\n')
 run('evaluation', a.jax_python, 'evaluate_c01_pi.py', ['--params', policy/'checkpoints'/str(best['step'])/'params',

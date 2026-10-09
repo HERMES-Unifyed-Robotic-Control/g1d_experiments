@@ -106,3 +106,7 @@ E30k于10月8日22:50（Asia/Shanghai）完成，最佳step30000。200观测验�
 2026-10-09 09:38（Asia/Shanghai）：GT-AUX 校准已通过，16个训练样本输出梯度比的中位数为0.0756023861，所选权重为1.3227095743；校准不执行优化器更新。队列已进入π LoRA 40000步阶段，模型已加载，正在等待首次编译/实际训练指标。最终holdout评测和baseline7500对比尚未完成。
 
 2026-10-09：A100 pytorch-ng-992446有240GiB RAM（available232GiB）、2×A10080GB，容器盘160GB空闲且HOME/workspace实写12MiB成功；指定Storage01持久化目录仍报EDQUOT，按用户指示继续在原A800运行。A800 π首次达到2500，200观测validation loss1.3847066134，但Orbax0.11.1缺CommitFutureAwaitingContractedSignals导致首个checkpoint未提交，无可可靠续训的cursor。已安装与sys01一致的Orbax0.11.13，失败产物保留为run/pi_lora_failed_save_20261009_2500，重新开始π；E和缓存、校准结果全部复用。最终评测及真机部署尚未执行。
+
+
+2026-10-09 A100迁移与A800续训：账号sysu_xdliang_4的修正密钥已通过Windows跳板认证。8174759/817588xt25每实例各1张A10080GB、GPU UUID不同；同一HDD_POOL实验目录可见且各实写/fsync32MiB成功。Torch NCCL及JAX实际全局2GPU的分片/梯度更新均通过。已部署完整Git历史、固定137文件C01依赖、环境、native tokenizer，准备复用A800 E30000和缓存；4985资产/26602404812bytes通过SHA256清单迁移中。双rank监督进程在等待资产完整，不代表C01已经开始更新。全局batch2/40k为独立探索分支，A800保持batch1主实验。详情见g1d_new_a100_20261009/STATUS.md及仓库A100_DISTRIBUTED.md。
+A800曾到10000并验证loss0.7109707500，但保存时soft nofile1024耗尽，10000未提交；失败临时检查点保留run/failed_checkpoint_10000_20261009。从已提交7500及cursor恢复，启动软上限65536，已实际重新更新至8140。2500/5000/7500检查点有效。新增源码用64个episode的LRU mmap缓存限制句柄，并只选择存在已提交params目录的检查点；本次运行中的A800使用已提高上限的既有入口，不为迁移再次重启。最终评测和真机比较尚未完成。

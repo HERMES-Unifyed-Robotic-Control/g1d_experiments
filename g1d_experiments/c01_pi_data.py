@@ -1,5 +1,6 @@
 """Same native16/quantile/padded32 state input for G1D pi train and inference."""
 from pathlib import Path
+from collections import OrderedDict
 import json
 import numpy as np
 import cv2
@@ -22,9 +23,11 @@ class G1DPolicyInputs:
         return dict(images=images,image_masks={k:np.True_ for k in keys},state=padded,tokenized_prompt=tokens.astype(np.int32),tokenized_prompt_mask=mask)
 
 class G1DPiData(G1DPolicyInputs):
-    def __init__(self,root,cache,split,norm_stats):
+    def __init__(self,root,cache,split,norm_stats,effect_cache_size=64):
         self.root=Path(root);self.cache=Path(cache);self.split=split
-        self.info,self.episodes=read_episodes(root);self.ends=np.cumsum([e['length'] for e in self.episodes]);self.effects={}
+        self.info,self.episodes=read_episodes(root);self.ends=np.cumsum([e['length'] for e in self.episodes]);self.effects=OrderedDict()
+        if effect_cache_size<1:raise ValueError('effect_cache_size must be positive')
+        self.effect_cache_size=effect_cache_size
         self.manifest=json.loads((self.cache/'manifest.json').read_text())
         if not self.manifest.get('complete') or self.manifest['state_dim']!=16 or self.manifest['action_dim']!=16:raise ValueError('Complete native16 E cache required')
         record=self.manifest['splits'][split]
@@ -40,7 +43,12 @@ class G1DPiData(G1DPolicyInputs):
             path=self.root/self.info['video_path'].format(episode_index=e,episode_chunk=e//self.info.get('chunks_size',1000),video_key='observation.images.'+view)
             rgb.append(frame_at(path,t))
         if e not in self.effects:self.effects[e]=np.load(self.cache/self.split/f'episode_{e:06d}.npy',mmap_mode='r')
-        effect=self.effects[e][t];raw=ep['states'][t];ids=t+np.arange(30);actions=ep['actions'][np.minimum(ids,n-1)]
+        self.effects.move_to_end(e)
+        effect=np.array(self.effects[e][t],copy=True)
+        while len(self.effects)>self.effect_cache_size:
+            _,old=self.effects.popitem(last=False)
+            old._mmap.close()
+        raw=ep['states'][t];ids=t+np.arange(30);actions=ep['actions'][np.minimum(ids,n-1)]
         out=self.inputs(rgb,raw,self.tasks[ep['task_index']]);out.update(effect_target=(effect-self.mean)/self.std,raw_state=raw,target_actions=actions,action_valid=ids<n)
         return out
     def batch(self,indices):

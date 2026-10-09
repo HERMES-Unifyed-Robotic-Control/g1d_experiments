@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-"""Single-GPU G1D C01 E flow + joint decoder + GT-AUX/gripper-delta training."""
+"""G1D C01 E flow + joint decoder; optional multi-process data parallelism."""
 from pathlib import Path
 import os,sys,argparse,dataclasses,functools,importlib.util,json,hashlib,time
 ROOT=Path(__file__).parents[1];os.environ.setdefault('PSI_HOME',str(ROOT/'vendor/openpi'));os.environ.setdefault('DATA_HOME',str(ROOT/'artifacts/data'));os.environ.setdefault('XLA_PYTHON_CLIENT_PREALLOCATE','false')
 sys.path[:0]=[str(ROOT),str(ROOT/'vendor/openpi/src'),str(ROOT/'vendor/openpi/src/openpi/openpi-client/src')]
 import numpy as np
 import jax
+from g1d_experiments import c01_distributed as distributed
+distributed_parser=distributed.arguments();distributed.initialize(distributed_parser)
 import jax.numpy as jnp
 from flax import nnx
 import optax
@@ -14,8 +16,10 @@ from openpi.shared import normalize
 from g1d_experiments.c01_pi import G1DC01PiConfig,G1DC01Weights
 from g1d_experiments.c01_pi_data import G1DPiData
 from train_subtask import LowMemoryAdamW
-p=argparse.ArgumentParser();p.add_argument('--cache',type=Path,required=True);p.add_argument('--train',type=Path,required=True);p.add_argument('--validation',type=Path,required=True);p.add_argument('--base-params',type=Path,required=True);p.add_argument('--norm-stats',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--variant',choices=['lora','fullft'],default='lora');p.add_argument('--steps',type=int,default=40000);p.add_argument('--batch-size',type=int,default=1);p.add_argument('--gtaux-weight',type=float,default=None,help='G1D calibrated weight, or explicit exploratory choice');p.add_argument('--delta-weight',type=float,default=.05);p.add_argument('--calibrate-only',action='store_true');p.add_argument('--resume',action='store_true');a=p.parse_args()
-if jax.device_count()!=1:raise RuntimeError('Expose one GPU; this portable trainer uses one-device sharding')
+p=argparse.ArgumentParser(parents=[distributed_parser]);p.add_argument('--cache',type=Path,required=True);p.add_argument('--train',type=Path,required=True);p.add_argument('--validation',type=Path,required=True);p.add_argument('--base-params',type=Path,required=True);p.add_argument('--norm-stats',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--variant',choices=['lora','fullft'],default='lora');p.add_argument('--steps',type=int,default=40000);p.add_argument('--batch-size',type=int,default=1);p.add_argument('--gtaux-weight',type=float,default=None,help='G1D calibrated weight, or explicit exploratory choice');p.add_argument('--delta-weight',type=float,default=.05);p.add_argument('--calibrate-only',action='store_true');p.add_argument('--resume',action='store_true');a=p.parse_args()
+if jax.local_device_count()!=1:raise RuntimeError('Expose one GPU per process')
+if a.batch_size%jax.device_count():raise ValueError('Global batch size must be divisible by total GPU count')
+if a.calibrate_only and jax.process_count()>1:raise ValueError('Reuse single-GPU GT-AUX calibration for the distributed comparison')
 if a.gtaux_weight is None:
  if not a.calibrate_only:raise ValueError('Run --calibrate-only first and provide its chosen_gtaux_weight')
  a.gtaux_weight=0.
@@ -25,8 +29,9 @@ if not manifest.get('complete'):raise ValueError('Export E cache first')
 for name,expected in [('decoder_init.npz','decoder_sha256'),('normalization.npz','normalization_sha256')]:
  if hashlib.sha256((a.cache/name).read_bytes()).hexdigest()!=manifest[expected]:raise ValueError('E cache asset changed:'+name)
 contract={'model':'g1d_c01_native16_joint_response_v1','variant':a.variant,'decoder_sha256':manifest['decoder_sha256'],'codec_sha256':manifest['checkpoint_sha256'],'E_norm_sha256':manifest['normalization_sha256'],'state_norm_sha256':hashlib.sha256(a.norm_stats.read_bytes()).hexdigest(),'train':str(a.train.resolve()),'validation':str(a.validation.resolve()),'state_dim':16,'padded_state_dim':32,'E_shape':[30,256],'output_action_dim':16,'gtaux_weight':a.gtaux_weight,'delta_weight':a.delta_weight,'decoder_lr_scale':.25,'seed':42,'batch_size':a.batch_size}
+if jax.process_count()>1:contract.update(process_count=jax.process_count(),global_device_count=jax.device_count(),parallelism='data_parallel',samples_per_step=a.batch_size)
 if (a.output/'contract.json').exists() and json.loads((a.output/'contract.json').read_text())!=contract:raise ValueError('Resume contract changed')
-(a.output/'contract.json').write_text(json.dumps(contract,indent=2)+'\n')
+distributed.write_json(a.output/'contract.json',contract);distributed.synchronize('c01_contract')
 train=G1DPiData(a.train,a.cache,'train',a.norm_stats);val=G1DPiData(a.validation,a.cache,'validation',a.norm_stats)
 if {e['source_episode_index'] for e in train.episodes}&{e['source_episode_index'] for e in val.episodes}:raise ValueError('Source episode leakage')
 base=config.get_config('g1d_subtasks_pi05_official_lora_holdout_v1');values=dataclasses.asdict(base.model);values.update(action_horizon=30,action_dim=32,decoder_init=str((a.cache/'decoder_init.npz').resolve()),gtaux_weight=a.gtaux_weight,delta_weight=a.delta_weight)
@@ -34,8 +39,9 @@ if a.variant=='fullft':values.update(paligemma_variant='gemma_2b',action_expert_
 model_config=G1DC01PiConfig(**values);cfg=dataclasses.replace(base,model=model_config,freeze_filter=model_config.get_freeze_filter() if a.variant=='lora' else nnx.Nothing,weight_loader=G1DC01Weights(str(a.base_params)),optimizer=LowMemoryAdamW(**dataclasses.asdict(base.optimizer)),num_train_steps=a.steps,batch_size=a.batch_size,fsdp_devices=1,ema_decay=None,lr_schedule=dataclasses.replace(base.lr_schedule,decay_steps=40000),resume=a.resume)
 spec=importlib.util.spec_from_file_location('official',ROOT/'historical/tools/openpi_train_official_215abfb.py');official=importlib.util.module_from_spec(spec);spec.loader.exec_module(official)
 mesh=sharding.make_mesh(1);ds=jax.sharding.NamedSharding(mesh,jax.sharding.PartitionSpec(sharding.DATA_AXIS));repl=jax.sharding.NamedSharding(mesh,jax.sharding.PartitionSpec())
-manager,resuming=checkpoints.initialize_checkpoint_dir(a.output/'checkpoints',keep_period=2500,overwrite=False,resume=a.resume)
-state,state_sharding=official.init_train_state(cfg,jax.random.key(42),mesh,resume=resuming);jax.block_until_ready(state)
+manager,resuming=distributed.checkpoint_manager(checkpoints,a.output/'checkpoints',a.resume)
+if jax.process_count()>1:cfg=dataclasses.replace(cfg,weight_loader=distributed.ReplicatedWeights(cfg.weight_loader,repl))
+state,state_sharding=official.init_train_state(cfg,distributed.key(42,repl) if jax.process_count()>1 else jax.random.key(42),mesh,resume=resuming);jax.block_until_ready(state)
 class Assets:
  def data_config(self):return dataclasses.replace(cfg.data.create(cfg.assets_dirs,cfg.model),norm_stats=normalize.load(a.norm_stats.parent),asset_id='g1d_subtasks_train_v1')
 assets=Assets();rng=np.random.default_rng(42)
@@ -45,7 +51,7 @@ fixed=[];off=0
 for e in val.episodes:
  for frac in (.25,.75):fixed.append(off+int(max(0,e['length']-30)*frac))
  off+=e['length']
-(a.output/'validation_indices.json').write_text(json.dumps(fixed))
+distributed.write_json(a.output/'validation_indices.json',fixed)
 def step_fn(state,batch):
  m=nnx.merge(state.model_def,state.params);m.train();obs,_=batch
  def objective(m):return m.losses(jax.random.fold_in(jax.random.key(42),state.step),obs,state.step,train=True)
@@ -69,18 +75,18 @@ def evaluate(st,batch,key):
  m=nnx.merge(st.model_def,st.params);m.eval();return m.losses(key,batch[0],st.step,train=False)[1]
 eval_jit=jax.jit(evaluate)
 while int(state.step)<a.steps:
- batch=jax.device_put(train.batch(rng.integers(0,len(train),a.batch_size)),ds);state,metrics=step_jit(state,batch);step=int(state.step)
+ batch=distributed.batch(train,rng.integers(0,len(train),a.batch_size),ds);state,metrics=step_jit(state,batch);step=int(state.step)
  if step%10==0:
   record={'step':step,**{k:float(v) for k,v in jax.device_get(metrics).items()}}
   if not all(np.isfinite(v) for v in record.values()):raise FloatingPointError('Nonfinite pi metrics')
-  with (a.output/'training_metrics.jsonl').open('a') as f:f.write(json.dumps(record)+'\n')
-  print(json.dumps(record),flush=True)
+  distributed.append_json(a.output/'training_metrics.jsonl',record)
+  if jax.process_index()==0:print(json.dumps(record),flush=True)
  if step%2500==0 or step==a.steps:
   values=[]
   for start in range(0,len(fixed),a.batch_size):
    ids=fixed[start:start+a.batch_size];n=len(ids);ids=ids+[ids[-1]]*(a.batch_size-n)
-   v=eval_jit(state,jax.device_put(val.batch(ids),ds),jax.random.fold_in(jax.random.key(20260924),start));values.append((n,{k:float(x) for k,x in jax.device_get(v).items()}))
+   v=eval_jit(state,distributed.batch(val,ids,ds),jax.random.fold_in(distributed.key(20260924,repl) if jax.process_count()>1 else jax.random.key(20260924),start));values.append((n,{k:float(x) for k,x in jax.device_get(v).items()}))
   record={'step':step,'observations':len(fixed),**{k:sum(n*v[k] for n,v in values)/len(fixed) for k in values[0][1]}}
-  with (a.output/'validation_metrics.jsonl').open('a') as f:f.write(json.dumps(record)+'\n')
-  checkpoints.save_state(manager,state,assets,step);manager.wait_until_finished();(a.output/f'cursor_{step}.json').write_text(json.dumps({'sample_rng':rng.bit_generator.state}))
-manager.close();(a.output/'TRAINING_COMPLETE.json').write_text(json.dumps({'steps':int(state.step)}))
+  distributed.append_json(a.output/'validation_metrics.jsonl',record)
+  checkpoints.save_state(manager,state,assets,step);manager.wait_until_finished();distributed.write_json(a.output/f'cursor_{step}.json',{'sample_rng':rng.bit_generator.state});distributed.synchronize('c01_cursor_'+str(step))
+manager.close();distributed.write_json(a.output/'TRAINING_COMPLETE.json',{'steps':int(state.step)});distributed.synchronize('c01_complete')
