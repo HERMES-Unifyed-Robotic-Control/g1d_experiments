@@ -36,7 +36,7 @@ cat "$C01_ROOT/ASSET_SYNC_STATUS.json" "$C01_ROOT/AUTO_SYNC_RETRY_STATUS.json"
 tail -f "$C01_ROOT/asset_sync_auto.log" "$C01_ROOT/sync_supervisor.log"
 ```
 
-汇总状态每完成20个文件更新；最后的大权重文件传输期间，汇总数可能较久不变。下面每10秒显示汇总和正在写入的大文件大小（bytes），不依赖watch软件：
+迁移脚本现已每5秒更新心跳，按实际完成顺序累计SHA256校验通过的文件，active_files记录正在写入的各文件、字节数和最后收到数据的时间。bytes仅表示已校验字节，written_bytes_including_unverified包含未校验的在途字节。下面每10秒显示汇总和正在写入的大文件大小（bytes），不依赖watch软件：
 
 ```bash
 C01_ROOT=$HOME/HDD_POOL/yangky/g1d_c01_20261009
