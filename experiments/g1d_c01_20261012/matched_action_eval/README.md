@@ -2,13 +2,13 @@
 
 ## 1. 当前进度与使用的检查点
 
-实查时间：**2026-10-12 10:14，Asia/Shanghai**。
+实查时间：**2026-10-12 10:37，Asia/Shanghai**。
 
 - **A800 LoRA100k：已完成训练与评测**；按heldout composite loss选中97500。97500 loss0.34772306，100000 loss0.34784741；本报告明确采用97500，不混称为100000步参数。
-- **A100双卡全量FT100k：61110/100000**；目前最优已提交检查点60000，验证loss0.15740303。本次完整动作生成评测采用**60000**；100k尚未完成，不能把本报告当作最终100k结果。
+- **A100双卡全量FT100k：61480/100000**；目前最优已提交检查点60000，验证loss0.15740303。本次完整动作生成评测采用**60000**；100k尚未完成，不能把本报告当作最终100k结果。
 - **992446迁移：尚未完成**。Range改造前已校验4963/5016文件、11.658/39.309GB（约29.66%字节）。随后因TimeoutError停/重试；旧转发断开已恢复。
 - 本轮增加HTTP Range保留.partial（实际后缀.transfer）续传，严格最终尺寸/SHA256一致才提交；通过真实206响应与已校验文件1024字节后切片一致性验证。目标新端口18203，后台恢复后计数会重新扫描，不表示已传内容被删除。
-- 当前迁移快照state=running，supervisor=syncing；该值是本报告生成时快照，以目标ASSET_SYNC_STATUS与SYNC_SUPERVISOR_STATUS最新心跳为准。
+- 当前迁移快照state=running，supervisor=syncing，已校验4966/5016文件、12.494/39.309GB，含未校验在途15.473GB；该值是本报告生成时快照，以目标ASSET_SYNC_STATUS与SYNC_SUPERVISOR_STATUS最新心跳为准。
 - **迁移范围更正**：39.309GB清单中的assets/baseline7500只有历史预测与评测元数据，不是完整7500参数。完整baseline权重在sys01原checkpoint及HF模型库，入口由仓库ARTIFACTS.json记录。之前将该目录笼统称为baseline权重不准确。C01 LoRA40000/97500参数在主迁移清单内。
 - TensorBoard sys01端转发重新启动于tmux g1d_tb_forward，实际tags API两路读回；A800 http://100.74.87.113:6008，A100 http://100.74.87.113:6009。
 - A100 rank1已安排tmux g1d_matched_final_wait：等训练100k完成后，从已提交checkpoint中选最低heldout composite loss，再执行同一200条动作评测，输出run/matched_20261012/fullft100k_best和FULLFT100K_PI_SELECTION.json。当前仍在等待训练完成。
@@ -157,13 +157,13 @@ FT近端预测更好，但夹爪在预测后段误差增长更快。前8/10步�
 - [总体CSV](results/overall.csv)、[任务CSV](results/by_task.csv)、[关节CSV](results/by_joint.csv)、[预测步CSV](results/by_horizon.csv)、[观测CSV](results/by_observation.csv)、[分组/差分CSV](results/by_group_temporal.csv)、[配对CI CSV](results/paired_bootstrap.csv)。
 - [所有16幅图的PDF](results/ALL_FIGURES.pdf)，单图PNG/PDF在results/figures，图表清单figure_catalog.json记录源数据/生成脚本/视觉检查。
 - raw/A800/run/matched_20261012与raw/A100/run/matched_20261012：三组predictions.npz、各自产生的元数据、baseline INPUT_AUDIT及选定观测PNG。
-- [比较协议](results/metric_contract.json)、[PLAN.md](PLAN.md)、[CHECKLIST.md](CHECKLIST.md)、脚本../../../scripts/evaluate_matched.py /../../../scripts/audit_baseline_inputs.py /analyze_actions.py。
+- [比较协议](results/metric_contract.json)、[PLAN.md](PLAN.md)、[CHECKLIST.md](CHECKLIST.md)、脚本evaluate_matched.py /audit_baseline_inputs.py /analyze_actions.py。
 
 分析复现（绘图不导入JAX或访问GPU）：
 
 ```bash
 uv venv .venv --python 3.12
-uv pip install --python .venv/bin/python numpy matplotlib pillow scipy
+uv pip install --python .venv/bin/python -r requirements-analysis.txt
 .venv/bin/python analyze_actions.py
 ```
 
