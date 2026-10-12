@@ -1,0 +1,8 @@
+{
+  "ordinal": 56,
+  "dataset_index": 7471,
+  "task_index": 3,
+  "source_episode": 45,
+  "criterion": "maximum fullFT60000 per-observation gripper mean squared action error over valid steps",
+  "ft_gripper_rmse": 1.1706790924072266
+}

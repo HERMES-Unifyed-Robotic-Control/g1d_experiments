@@ -1,0 +1,226 @@
+[
+  {
+    "name": "01_overall_accuracy",
+    "surface_class": "internal_review",
+    "claim": "Overall teacher-observation physical action error, no closed-loop success inference",
+    "png": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/01_overall_accuracy.png",
+    "pdf": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/01_overall_accuracy.pdf",
+    "generator": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/analyze_actions.py",
+    "source_data": [
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/baseline7500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/lora97500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A100/run/matched_20261012/fullft60000/predictions.npz"
+    ],
+    "visual_review": "accepted: rendered overview/horizon/openloop and16-figure montage inspected; labels moved aboveCI, style hex values quoted, constant correlations fixed and temporal units clarified; final temporal figure re-inspected"
+  },
+  {
+    "name": "02_horizon_error",
+    "surface_class": "internal_review",
+    "claim": "Error versus prediction offset, split arms/grippers",
+    "png": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/02_horizon_error.png",
+    "pdf": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/02_horizon_error.pdf",
+    "generator": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/analyze_actions.py",
+    "source_data": [
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/baseline7500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/lora97500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A100/run/matched_20261012/fullft60000/predictions.npz"
+    ],
+    "visual_review": "accepted: rendered overview/horizon/openloop and16-figure montage inspected; labels moved aboveCI, style hex values quoted, constant correlations fixed and temporal units clarified; final temporal figure re-inspected"
+  },
+  {
+    "name": "03_task_and_joint_error",
+    "surface_class": "internal_review",
+    "claim": "Per-subtask and per-motor error; grippers shown separately by position in joint plot",
+    "png": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/03_task_and_joint_error.png",
+    "pdf": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/03_task_and_joint_error.pdf",
+    "generator": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/analyze_actions.py",
+    "source_data": [
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/baseline7500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/lora97500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A100/run/matched_20261012/fullft60000/predictions.npz"
+    ],
+    "visual_review": "accepted: rendered overview/horizon/openloop and16-figure montage inspected; labels moved aboveCI, style hex values quoted, constant correlations fixed and temporal units clarified; final temporal figure re-inspected"
+  },
+  {
+    "name": "04_error_distribution_temporal",
+    "surface_class": "internal_review",
+    "claim": "Observation error distribution and temporal target fidelity, not executed vibration",
+    "png": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/04_error_distribution_temporal.png",
+    "pdf": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/04_error_distribution_temporal.pdf",
+    "generator": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/analyze_actions.py",
+    "source_data": [
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/baseline7500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/lora97500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A100/run/matched_20261012/fullft60000/predictions.npz"
+    ],
+    "visual_review": "accepted: rendered overview/horizon/openloop and16-figure montage inspected; labels moved aboveCI, style hex values quoted, constant correlations fixed and temporal units clarified; final temporal figure re-inspected"
+  },
+  {
+    "name": "05_c01_validation_curves",
+    "surface_class": "internal_review",
+    "claim": "C01 validation objective; baseline action-space loss intentionally not mixed into this figure",
+    "png": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/05_c01_validation_curves.png",
+    "pdf": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/05_c01_validation_curves.pdf",
+    "generator": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/analyze_actions.py",
+    "source_data": [
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/baseline7500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/lora97500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A100/run/matched_20261012/fullft60000/predictions.npz"
+    ],
+    "visual_review": "accepted: rendered overview/horizon/openloop and16-figure montage inspected; labels moved aboveCI, style hex values quoted, constant correlations fixed and temporal units clarified; final temporal figure re-inspected"
+  },
+  {
+    "name": "07_training_loss_and_lr",
+    "surface_class": "internal_review",
+    "claim": "C01 training evolution; unequal batch/LR protocols disclosed, not action-space baseline loss",
+    "png": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/07_training_loss_and_lr.png",
+    "pdf": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/07_training_loss_and_lr.pdf",
+    "generator": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/analyze_actions.py",
+    "source_data": [
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/baseline7500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/lora97500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A100/run/matched_20261012/fullft60000/predictions.npz"
+    ],
+    "visual_review": "accepted: rendered overview/horizon/openloop and16-figure montage inspected; labels moved aboveCI, style hex values quoted, constant correlations fixed and temporal units clarified; final temporal figure re-inspected"
+  },
+  {
+    "name": "openloop_task0_anchor000",
+    "surface_class": "internal_review",
+    "claim": "All16 action trajectories for one identical current observation; first fixed anchor for task",
+    "png": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/openloop_task0_anchor000.png",
+    "pdf": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/openloop_task0_anchor000.pdf",
+    "generator": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/analyze_actions.py",
+    "source_data": [
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/baseline7500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/lora97500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A100/run/matched_20261012/fullft60000/predictions.npz"
+    ],
+    "visual_review": "accepted: rendered overview/horizon/openloop and16-figure montage inspected; labels moved aboveCI, style hex values quoted, constant correlations fixed and temporal units clarified; final temporal figure re-inspected"
+  },
+  {
+    "name": "openloop_task1_anchor002",
+    "surface_class": "internal_review",
+    "claim": "All16 action trajectories for one identical current observation; first fixed anchor for task",
+    "png": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/openloop_task1_anchor002.png",
+    "pdf": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/openloop_task1_anchor002.pdf",
+    "generator": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/analyze_actions.py",
+    "source_data": [
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/baseline7500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/lora97500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A100/run/matched_20261012/fullft60000/predictions.npz"
+    ],
+    "visual_review": "accepted: rendered overview/horizon/openloop and16-figure montage inspected; labels moved aboveCI, style hex values quoted, constant correlations fixed and temporal units clarified; final temporal figure re-inspected"
+  },
+  {
+    "name": "openloop_task2_anchor004",
+    "surface_class": "internal_review",
+    "claim": "All16 action trajectories for one identical current observation; first fixed anchor for task",
+    "png": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/openloop_task2_anchor004.png",
+    "pdf": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/openloop_task2_anchor004.pdf",
+    "generator": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/analyze_actions.py",
+    "source_data": [
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/baseline7500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/lora97500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A100/run/matched_20261012/fullft60000/predictions.npz"
+    ],
+    "visual_review": "accepted: rendered overview/horizon/openloop and16-figure montage inspected; labels moved aboveCI, style hex values quoted, constant correlations fixed and temporal units clarified; final temporal figure re-inspected"
+  },
+  {
+    "name": "openloop_task3_anchor006",
+    "surface_class": "internal_review",
+    "claim": "All16 action trajectories for one identical current observation; first fixed anchor for task",
+    "png": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/openloop_task3_anchor006.png",
+    "pdf": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/openloop_task3_anchor006.pdf",
+    "generator": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/analyze_actions.py",
+    "source_data": [
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/baseline7500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/lora97500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A100/run/matched_20261012/fullft60000/predictions.npz"
+    ],
+    "visual_review": "accepted: rendered overview/horizon/openloop and16-figure montage inspected; labels moved aboveCI, style hex values quoted, constant correlations fixed and temporal units clarified; final temporal figure re-inspected"
+  },
+  {
+    "name": "openloop_task4_anchor008",
+    "surface_class": "internal_review",
+    "claim": "All16 action trajectories for one identical current observation; first fixed anchor for task",
+    "png": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/openloop_task4_anchor008.png",
+    "pdf": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/openloop_task4_anchor008.pdf",
+    "generator": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/analyze_actions.py",
+    "source_data": [
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/baseline7500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/lora97500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A100/run/matched_20261012/fullft60000/predictions.npz"
+    ],
+    "visual_review": "accepted: rendered overview/horizon/openloop and16-figure montage inspected; labels moved aboveCI, style hex values quoted, constant correlations fixed and temporal units clarified; final temporal figure re-inspected"
+  },
+  {
+    "name": "openloop_task5_anchor072",
+    "surface_class": "internal_review",
+    "claim": "All16 action trajectories for one identical current observation; first fixed anchor for task",
+    "png": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/openloop_task5_anchor072.png",
+    "pdf": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/openloop_task5_anchor072.pdf",
+    "generator": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/analyze_actions.py",
+    "source_data": [
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/baseline7500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/lora97500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A100/run/matched_20261012/fullft60000/predictions.npz"
+    ],
+    "visual_review": "accepted: rendered overview/horizon/openloop and16-figure montage inspected; labels moved aboveCI, style hex values quoted, constant correlations fixed and temporal units clarified; final temporal figure re-inspected"
+  },
+  {
+    "name": "openloop_task6_anchor132",
+    "surface_class": "internal_review",
+    "claim": "All16 action trajectories for one identical current observation; first fixed anchor for task",
+    "png": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/openloop_task6_anchor132.png",
+    "pdf": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/openloop_task6_anchor132.pdf",
+    "generator": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/analyze_actions.py",
+    "source_data": [
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/baseline7500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/lora97500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A100/run/matched_20261012/fullft60000/predictions.npz"
+    ],
+    "visual_review": "accepted: rendered overview/horizon/openloop and16-figure montage inspected; labels moved aboveCI, style hex values quoted, constant correlations fixed and temporal units clarified; final temporal figure re-inspected"
+  },
+  {
+    "name": "06_observation_contact_sheet",
+    "surface_class": "internal_review",
+    "claim": "Three current RGB views for deterministic per-task representative anchors",
+    "png": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/06_observation_contact_sheet.png",
+    "pdf": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/06_observation_contact_sheet.pdf",
+    "generator": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/analyze_actions.py",
+    "source_data": [
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/baseline7500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/lora97500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A100/run/matched_20261012/fullft60000/predictions.npz"
+    ],
+    "visual_review": "accepted: rendered overview/horizon/openloop and16-figure montage inspected; labels moved aboveCI, style hex values quoted, constant correlations fixed and temporal units clarified; final temporal figure re-inspected"
+  },
+  {
+    "name": "08_worst_fullft_gripper_diagnostic",
+    "surface_class": "internal_review",
+    "claim": "Largest FT gripper MSE observation, explicit diagnostic selection; teacher-observation target and measured demo state",
+    "png": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/08_worst_fullft_gripper_diagnostic.png",
+    "pdf": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/08_worst_fullft_gripper_diagnostic.pdf",
+    "generator": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/analyze_actions.py",
+    "source_data": [
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/baseline7500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/lora97500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A100/run/matched_20261012/fullft60000/predictions.npz"
+    ],
+    "visual_review": "accepted: rendered overview/horizon/openloop and16-figure montage inspected; labels moved aboveCI, style hex values quoted, constant correlations fixed and temporal units clarified; final temporal figure re-inspected"
+  },
+  {
+    "name": "09_prefix_window_accuracy",
+    "surface_class": "internal_review",
+    "claim": "Accuracy of firstN predicted targets; offline diagnostic, no control-window tuning performed",
+    "png": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/09_prefix_window_accuracy.png",
+    "pdf": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/results/figures/09_prefix_window_accuracy.pdf",
+    "generator": "/mnt/data2/yangky/test/g1d_action_comparison_20261012/analyze_actions.py",
+    "source_data": [
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/baseline7500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A800/run/matched_20261012/lora97500/predictions.npz",
+      "/mnt/data2/yangky/test/g1d_action_comparison_20261012/raw/A100/run/matched_20261012/fullft60000/predictions.npz"
+    ],
+    "visual_review": "accepted: rendered overview/horizon/openloop and16-figure montage inspected; labels moved aboveCI, style hex values quoted, constant correlations fixed and temporal units clarified; final temporal figure re-inspected"
+  }
+]

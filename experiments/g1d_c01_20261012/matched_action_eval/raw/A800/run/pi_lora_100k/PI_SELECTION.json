@@ -1,0 +1,10 @@
+{
+  "step": 97500,
+  "observations": 200,
+  "effect_loss": 0.33923145674169064,
+  "gripper_delta": 0.017198893123859308,
+  "gtaux": 0.011175723239284707,
+  "loss": 0.347723062299192,
+  "ramp": 1.0,
+  "selection": "minimum heldout composite loss among continuation committed checkpoints; not independent test"
+}

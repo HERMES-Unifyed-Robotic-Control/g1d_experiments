@@ -162,3 +162,7 @@ E/π、训练监督和在线推理链路说明见[MODEL_GUIDE.md](MODEL_GUIDE.md
 ## C01首轮A800 40k结果
 
 E30k与π LoRA40k已完成，选中π40000。200个holdout观测、前30步native16动作误差对比与独立G1D客户端入口见[首轮结果](experiments/g1d_c01_20261008/results_a800_40k/README.md)。MAE下降11.60%，RMSE下降16.14%；尚未进行该权重的真机成功率评测。A100迁移完成后已启动双实例LoRA训练，global batch2。
+
+## 2026-10-12 同观测动作评测
+
+[π0.5 baseline7500 / C01 LoRA97500 / C01全量FT60000的指标、开环图与原始数组](experiments/g1d_c01_20261012/matched_action_eval/README.md)。A800 LoRA100k已完成，A100全量FT100k仍在训练；当前FT图不是100k最终结果。完整30步中FT平均误差更低，但夹爪极端误差使RMSE差于LoRA；前8/10步FT优势更明显。报告含16幅PNG/PDF、逐关节/任务/预测步CSV与source-episode配对bootstrap。

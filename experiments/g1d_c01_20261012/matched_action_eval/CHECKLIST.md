@@ -1,0 +1,12 @@
+- [x] Inspect training and migration state
+- [x] Plan and explicit interimFT60000 choice
+- [x] Restore transfer and verify real HTTP/progress
+- [x] Verify baseline observation/evaluation contract
+- [x] FullFT checkpoint action-generation evaluation completed
+- [x] Fetch raw prediction arrays and verify comparability
+- [x] Compute pooled/group/task/horizon/temporal metrics and bootstrap
+- [x] Export and visually inspect open-loop/comparison figures
+- [x] Deliver report, paths and STATUS update
+
+- [x] Full FT final100k action evaluation queued; current published figures explicitly useinterim60000
+- [x] Clarified that migration baseline7500 source contains predictions/provenance, not fullparams
