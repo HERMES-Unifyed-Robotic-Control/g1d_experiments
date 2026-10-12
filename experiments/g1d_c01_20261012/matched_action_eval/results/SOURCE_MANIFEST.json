@@ -309,7 +309,8 @@
   "script_sha256": {
     "evaluate_matched.py": "20a5b90dc3df18546189bda42cccb46d648ea8ca040caa25139605899f61869e",
     "audit_baseline_inputs.py": "32eeb0ed41bee52e1c69ddab2dc9612f40a339e19429998f26b33f521e37e2b9",
-    "analyze_actions.py": "344f88a9cb0dbe32779e17c89375485808d2f7a6a397b964cbc7f5f44d723780"
+    "analyze_actions.py": "54e90c5e13cd5271b8b8810b24b1e9ee155fc2d147f26faa59deca5a97e1bf74"
   },
-  "generated_unix": 1791772179.459909
+  "generated_unix": 1791772179.459909,
+  "source_note": "Post-render source edits clarified provenance wording only; numerical computations and rendered plots unchanged."
 }

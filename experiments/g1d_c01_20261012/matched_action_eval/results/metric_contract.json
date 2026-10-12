@@ -1,6 +1,6 @@
 {
   "baseline": "pi0.5 official subtask LoRA7500",
-  "route": "attach historical verified predictions after200 current baseline-transform-vs-C01 tensor equality audit",
+  "route": "attach historical baseline predictions with current200-row audit: raw RGB pixels/state/masks/tokens exact; normalized image floats equivalent to2e-7",
   "source_sha256": "5cb9ca54a89c91d20f6daba2c5cdd3f2814d8973547aab51d86ebdff4b908ab5",
   "accepted": true,
   "trusted_for": "selected-holdout open-loop physical action comparison only",
@@ -15,5 +15,6 @@
   "direction": "lower is better for target-error metrics; smoothness magnitude alone is not success",
   "paired_observation_verified": true,
   "float_image_roundoff_note": "Original baseline JAX versus C01 NumPy normalized float images differ<=2e-7; exact reconstructed uint8 RGB and nonimage inputs. Both hashes preserved.",
-  "unit_note": "native motor position units; arm angles in rad; gripper separately reported"
+  "unit_note": "native motor position units; arm angles in rad; gripper separately reported",
+  "historical_input_archival_limitation": "Original baseline prediction package does not contain per-observation tensor hashes; hashes in audit reconstruct current original preprocessing. Baseline neural inference was not rerun."
 }

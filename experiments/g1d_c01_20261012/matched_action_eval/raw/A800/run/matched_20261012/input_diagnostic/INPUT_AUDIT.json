@@ -1,0 +1,26 @@
+{
+  "all_equal": false,
+  "observations": 1,
+  "rows": [
+    {
+      "ordinal": 0,
+      "index": 60,
+      "equal": false,
+      "max_abs_diffs": {
+        "(DictKey(key='image_masks'), DictKey(key='base_0_rgb'))": 0.0,
+        "(DictKey(key='image_masks'), DictKey(key='left_wrist_0_rgb'))": 0.0,
+        "(DictKey(key='image_masks'), DictKey(key='right_wrist_0_rgb'))": 0.0,
+        "(DictKey(key='images'), DictKey(key='base_0_rgb'))": 1.1920928955078125e-07,
+        "(DictKey(key='images'), DictKey(key='left_wrist_0_rgb'))": 1.1920928955078125e-07,
+        "(DictKey(key='images'), DictKey(key='right_wrist_0_rgb'))": 1.1920928955078125e-07,
+        "(DictKey(key='state'),)": 0.0,
+        "(DictKey(key='tokenized_prompt'),)": 0.0,
+        "(DictKey(key='tokenized_prompt_mask'),)": 0.0
+      },
+      "baseline_hash": "f42a93e7451c5306e3ebdbf8a29a3ff55b25f3868929ae2e4324102609c8626b",
+      "c01_hash": "e779e0c92b727f2dbb80937f908422067c1b38fb8f956cbc8233d143097c6b1f"
+    }
+  ],
+  "baseline_source_npz_sha256": "5cb9ca54a89c91d20f6daba2c5cdd3f2814d8973547aab51d86ebdff4b908ab5",
+  "note": "Reconstruct original baseline input pipeline on same video frames; attach historical predictions only if every normalized tensor/token matches C01 inputs"
+}
