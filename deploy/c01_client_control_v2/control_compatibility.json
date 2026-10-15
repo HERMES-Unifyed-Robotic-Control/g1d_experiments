@@ -1,0 +1,37 @@
+{
+  "control_revision": "no_static_blend_async_recording_deadline_v2_20261013",
+  "purpose": "New control-only client; strict pinned upstream inference metadata, separate client file verification.",
+  "upstream_contract": {
+    "contract_version": "g1d-c01-native16-v1",
+    "profile": "official",
+    "dataset": "g1d_subtasks_official_train_v1",
+    "action_layout": "left_arm_7,right_arm_7,left_gripper,right_gripper",
+    "action_dim": 16,
+    "model_action_dim": 256,
+    "action_horizon": 30,
+    "fps": 30,
+    "prompt_mode": "subtask",
+    "image_preprocess": "openpi_client.resize_with_pad.PIL_BILINEAR",
+    "normalization": "official_quantile_unclipped",
+    "checkpoint": "/mnt/data2/yangky/test/g1d_c01_fullft_deploy_20261013/assets/c01_fullft72500",
+    "backend": "jax_c01_fullft",
+    "norm_stats_sha256": "5801d57c3c40374d7882ef4edbe2ebfa0e3d9a103ae18cb1fd679e79deb770b9",
+    "profiles_sha256": "76fb1edaf9051eb1711483551c4d5f3d55932ab6e9c394441ba0842571c11298",
+    "client_sha256": "4ff7033c379eb15aaaf45e1e21f7e6cf12360e8c43f480c0ff351a00002dc6a6",
+    "runtime_helper_sha256": "6c29437aefccdcde88d00eb1682da81b4a31cc26546fda5139b325c88e304fcd",
+    "image_tools_sha256": "d48b4bd7f44e79fe6db8a8e07c9161144fa250be686e1245014a8b47e6171977",
+    "codec_sha256": "35dd0cba18b5e763f6a9ff97dca1100b0c51eabeff942193f227c6cb2447794e",
+    "decoder_init_sha256": "4d0fdc93dff3bda2196e2380cc53c1739f72969086670cb3c717115dd0ab32ce",
+    "denoise_steps": 10,
+    "raw_state_dim": 16,
+    "padded_state_dim": 32
+  },
+  "control_files_sha256": {
+    "control_runtime.py": "6cfb459e99713e28aea7c3bcaac881d334b4fbbbb7f803666b9e9b42d7919396",
+    "deploy_g1d_food_sorting_pi05.py": "397f0dd8752987c24438096f2e6a873f6a15e484eb84c9564307b7b4f461741d",
+    "g1d_profiles_baseline.json": "099c3ec9401de6af0edb364cd500bfc9a4f0e66673d759942afc67e2c680d0f1",
+    "launch_g1d_client.py": "c7e7022062f2bae89889b31693e7afe6906c449938e54358867e908b6e1ded7e",
+    "robot_alignment.py": "6c29437aefccdcde88d00eb1682da81b4a31cc26546fda5139b325c88e304fcd",
+    "run_client_on_g1d.sh": "81e4dbd9b2e198eb64d4fdc2b5b87e830ad27c6fff9f150ce629e98dd2cdce30"
+  }
+}

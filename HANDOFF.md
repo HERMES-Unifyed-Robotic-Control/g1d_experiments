@@ -9,9 +9,9 @@
 |原始food sorting|[food_sorting.tar](https://huggingface.co/datasets/yky666/humanoid_long_horizon_tasks/blob/main/food_sorting.tar)|
 |标注与划分|[annotations](https://huggingface.co/datasets/yky666/humanoid_long_horizon_tasks/tree/main/g1d_food_sorting/annotations)|
 |四个LeRobot视频数据包|[processed](https://huggingface.co/datasets/yky666/humanoid_long_horizon_tasks/tree/main/g1d_food_sorting/processed)|
-|7500baseline检查点|[7500](https://huggingface.co/yky666/g1d-pi05-subtask-baseline/tree/main/7500)|
+|7500baseline检查点|[7500](https://huggingface.co/yky666/g1d_experiments/tree/main/pi05_lora_baseline/7500)|
 
-截图中的`water_bottle_pick_and_insert.rar`是另一任务。返回Files根目录后进入`g1d_food_sorting`即可找到本次数据。tar和检查点分片太大，HF不能直接预览；点Download或用下面的下载脚本。权重为私有，需登录拥有权限的账号，否则链接可能显示404。
+截图中的`water_bottle_pick_and_insert.rar`是另一任务。返回Files根目录后进入`g1d_food_sorting`即可找到本次数据。tar和检查点分片太大，HF不能直接预览；点Download或用下面的下载脚本。统一模型仓库已公开，可直接下载。
 
 ## 2. 获取代码与数据
 
@@ -19,7 +19,7 @@
 git clone --recurse-submodules https://github.com/HERMES-Unifyed-Robotic-Control/g1d_experiments.git
 cd g1d_experiments
 python -m pip install -r requirements-data.txt
-# 使用具有私有模型访问权限的HF账号登录
+# 公开模型无需私有访问权限
 python scripts/download_artifacts.py --dataset subtasks_train --dataset subtasks_validation --baseline
 ```
 
@@ -47,10 +47,19 @@ python scripts/evaluate_subtask.py --checkpoint artifacts/baseline/7500 --varian
 `supervision`: action/state_future/joint_response `[B,30,16]`、valid `[B,30]`。
 RGB uint8；state/action为物理单位。H30@30Hz；三视图按egocentric,left_wrist,right_wrist排列。未来数据只能用于E/损失监督，不进入π推理。
 
-原22/44D末端+灵巧手动作不等于G1D的双臂14关节+2夹爪。不能靠补零、切片或转换名称来直接部署原C01权重。已提供原生16D数据/decoder/GT-AUX和gripper-Δ组件；已加入G1D视觉准备、E训练/cache导出、原生16D JAX/pi桥接、GT-AUX校准、π训练与动作评估入口；运行顺序见 [RUN_C01.md](experiments/g1d_c01_20261008/RUN_C01.md)。DINOv3原生权重已就绪，A800已开始真实视觉特征准备，队列随后运行E30k与π LoRA40k；没有完成的C01评测结果。
+原22/44D末端+灵巧手动作不等于G1D的双臂14关节+2夹爪。不能靠补零、切片或转换名称来直接部署原C01权重。已提供原生16D数据/decoder/GT-AUX和gripper-Δ组件；已加入G1D视觉准备、E训练/cache导出、原生16D JAX/pi桥接、GT-AUX校准、π训练与动作评估入口；运行顺序见 [RUN_C01.md](experiments/g1d_c01_20261008/RUN_C01.md)。DINOv3原生权重已就绪，A800已开始真实视觉特征准备，队列随后运行E30k与π LoRA40k；这是早期进度描述；当前C01 LoRA及全量FT均已完成100k，AFCE全量FT选72500，验证loss0.1550050788745284。
 
-## 5. 权重与证据
+## 5. AFCE全量FT评测入口
 
-模型repo：`yky666/g1d-pi05-subtask-baseline`（私有）。`7500/`含完整baseline训练状态；`comparisons/`仅含推理params/assets。具体已发布权重和不可变revision见ARTIFACTS.json。
+```bash
+python scripts/download_artifacts.py --afce-fullft
+python scripts/serve_c01.py --checkpoint artifacts/afce_fullft/72500 --cache artifacts/afce_fullft/cache --variant fullft --port 9023 --denoise-steps 10 --warmup
+```
+
+上传完成且ARTIFACTS.json更新为complete后再下载；baseline的下载路径和现有评测命令保持一致。AFCE推理不需要DINOv3或训练期E编码器。代码与资产使用同一git commit和HF revision记录。
+
+## 6. 权重与证据
+
+模型repo：公开 `yky666/g1d_experiments`。`pi05_lora_baseline/7500`和`afce_fullft/72500`为推理checkpoint；AFCE附`afce_fullft/cache`。发布状态与固定revision见ARTIFACTS.json；只有phase=complete的条目可以下载。
 
 代码在GitHub；大数据/权重在HF；三者权限独立。实验报告为历史现场证据，路径/进度不是可迁移配置。评测应记录prompt、原子起点、物料抓取条件、人工介入次数、progress/10与闭环成功率。

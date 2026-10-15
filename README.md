@@ -1,5 +1,27 @@
 # G1D Food Sorting Experiments
 
+
+## 当前公开权重入口（2026-10-15）
+
+代码统一在本GitHub仓库，权重统一在公开的 [yky666/g1d_experiments](https://huggingface.co/yky666/g1d_experiments)。数据继续在 [humanoid_long_horizon_tasks](https://huggingface.co/datasets/yky666/humanoid_long_horizon_tasks)。下载无需私有模型访问权限；固定revision与发布状态见`ARTIFACTS.json`。
+
+|模型|HF目录|选点与状态|
+|---|---|---|
+|π0.5 LoRA baseline|`pi05_lora_baseline/7500`|7500，已发布|
+|AFCE/C01 全量FT|`afce_fullft/72500`，附`afce_fullft/cache`|100k训练完成后选72500；权重仍在上传，待ARTIFACTS.json标记complete|
+
+```bash
+python scripts/download_artifacts.py --baseline
+# AFCE发布状态complete后：
+python scripts/download_artifacts.py --afce-fullft
+python scripts/serve_c01.py --checkpoint artifacts/afce_fullft/72500 --cache artifacts/afce_fullft/cache --variant fullft --port 9023 --warmup
+```
+
+AFCE的三路RGB＋16D实测state（补到32D）＋subtask prompt，输出30×16动作；baseline输出32步，对比取前30步。AFCE推理不需要DINOv3/E编码器。保留subtask切换协议；整任务3×40k是另一个实验。当前推理server支持`--client-dir`隔离契约；已部署的控制v2源码见`deploy/c01_client_control_v2/`，其旧路径契约是历史快照，换环境需重新绑定，详见`experiments/g1d_control_v2_20261013/RUN_CONTROL_V2.md`。
+
+旧的分立HF model仓库仅作为历史来源；当前下载入口已迁移至统一仓库。以下实验记录中的机器路径、训练进度和私有入口说明可能是历史快照。
+
+
 G1D 菊花、红枣、柠檬片任务的完整数据处理、subtask 标注、pi0.5 baseline、训练对照、真机执行和 Dexjoco C01 G1D训练与评测适配。**当前 baseline 为官方 OpenPI pi0.5 七个 subtask 的 LoRA step7500**，保留 2026-09-26 曾成功抓杯的权重；它是独立baseline，尚不是G1D C01权重。用户报告当前控制修正后的效果可用，但尚无系统闭环成功率统计。
 
 > 标注、四个视频数据包和7500baseline均已上传并固定revision。比较权重受A800网络/跳板断线影响尚未完成上传；以 `ARTIFACTS.json` 中 `phase=complete` 为准。
@@ -40,7 +62,7 @@ python scripts/download_artifacts.py --dataset subtasks_train --dataset subtasks
 # 如需重新切分或完整任务训练：另下载 whole_197 / subtasks_all
 ```
 
-Baseline模型仓库为私有：[yky666/g1d-pi05-subtask-baseline](https://huggingface.co/yky666/g1d-pi05-subtask-baseline)。需有权限的HF账号登录或通过HF_TOKEN提供权限，勿把token写入代码。GitHub私有仓库访问权限不会自动授予HF私有模型权限。
+Baseline已迁移到公开HF仓库 `yky666/g1d_experiments` 的 `pi05_lora_baseline/7500`；无需私有模型权限。
 
 ## 安装baseline环境
 

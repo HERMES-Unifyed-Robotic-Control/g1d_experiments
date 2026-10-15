@@ -1,6 +1,6 @@
 {
   "dataset_repo": "yky666/humanoid_long_horizon_tasks",
-  "model_repo": "yky666/g1d-pi05-subtask-baseline",
+  "model_repo": "yky666/g1d_experiments",
   "annotations_revision": "40881b8b02fada4ca8c221af06827c4338731a17",
   "datasets": {
     "whole_197": {
@@ -33,10 +33,12 @@
     }
   },
   "baseline": {
-    "revision": "34b52faadba4e942fcffa6b4703de97ecd9d076a",
+    "revision": "7bd1806c6fe8a4c01884c869935843b1fd521a5f",
     "step": 7500,
     "phase": "complete",
-    "repo": "yky666/g1d-pi05-subtask-baseline"
+    "repo": "yky666/g1d_experiments",
+    "path": "pi05_lora_baseline/7500",
+    "private": false
   },
   "comparisons": {
     "lora_40000": {
@@ -63,5 +65,17 @@
       "path": "comparisons/fullft_75000",
       "reason": "A800 cannot resolve Hugging Face directly; reverse proxy disconnected repeatedly before commit"
     }
+  },
+  "legacy_model_repo": "yky666/g1d-pi05-subtask-baseline",
+  "afce_fullft": {
+    "repo": "yky666/g1d_experiments",
+    "path": "afce_fullft/72500",
+    "cache": "afce_fullft/cache",
+    "step": 72500,
+    "training_steps": 100000,
+    "phase": "uploading",
+    "revision": null,
+    "private": false,
+    "validation_loss": 0.1550050788745284
   }
 }

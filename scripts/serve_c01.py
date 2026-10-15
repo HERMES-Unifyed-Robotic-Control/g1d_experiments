@@ -23,6 +23,7 @@ p.add_argument('--checkpoint', type=Path, required=True, help='pi/checkpoints/<s
 p.add_argument('--cache', type=Path, required=True)
 p.add_argument('--port', type=int, default=9021)
 p.add_argument('--variant', choices=['lora', 'fullft'], default='lora')
+p.add_argument('--client-dir', type=Path, default=ROOT/'deploy/c01_client', help='Isolated client/profile contract directory')
 p.add_argument('--denoise-steps', type=int, default=10)
 p.add_argument('--warmup', action='store_true', help='Compile with synthetic observations before accepting clients')
 a = p.parse_args()
@@ -62,7 +63,7 @@ class C01Policy:
         if actions.shape != (30, 16) or not np.isfinite(actions).all(): raise ValueError('Invalid C01 physical actions')
         return {'actions': actions}
 
-client = ROOT/'deploy/c01_client'
+client = a.client_dir.resolve()
 pf = client/'g1d_profiles_baseline.json'
 profiles = json.loads(pf.read_text())
 ref = profiles['profiles']['official']

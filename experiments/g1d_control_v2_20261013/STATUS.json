@@ -1,0 +1,11 @@
+{
+  "state": "deployed_ready_for_operator_rollout",
+  "server": "192.168.10.116:9023",
+  "checkpoint": "C01 FullFT72500",
+  "client": "/home/unitree/pi05_g1d_deploy_c01_fullft72500_control_v2_20261013",
+  "offline_checks_sys01": 8,
+  "offline_checks_g1d": 8,
+  "server_contract_check": "passed",
+  "robot_motion_executed": false,
+  "scope": "blend0, background recording, monotonic deadlines, stale observation rejection; no new acceleration planner"
+}
