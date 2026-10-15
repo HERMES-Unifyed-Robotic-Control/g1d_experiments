@@ -8,18 +8,18 @@
 |模型|HF目录|选点与状态|
 |---|---|---|
 |π0.5 LoRA baseline|`pi05_lora_baseline/7500`|7500，已发布|
-|AFCE/C01 全量FT|`afce_fullft/72500`，附`afce_fullft/cache`|100k训练完成后选72500；权重仍在上传，待ARTIFACTS.json标记complete|
+|AFCE/C01 全量FT|`afce_fullft/72500`，附`afce_fullft/cache`|100k训练完成后选72500；已上传并校验|
 
 ```bash
 python scripts/download_artifacts.py --baseline
-# AFCE发布状态complete后：
+# AFCE全量FT：
 python scripts/download_artifacts.py --afce-fullft
 python scripts/serve_c01.py --checkpoint artifacts/afce_fullft/72500 --cache artifacts/afce_fullft/cache --variant fullft --port 9023 --warmup
 ```
 
 AFCE的三路RGB＋16D实测state（补到32D）＋subtask prompt，输出30×16动作；baseline输出32步，对比取前30步。AFCE推理不需要DINOv3/E编码器。保留subtask切换协议；整任务3×40k是另一个实验。当前推理server支持`--client-dir`隔离契约；已部署的控制v2源码见`deploy/c01_client_control_v2/`，其旧路径契约是历史快照，换环境需重新绑定，详见`experiments/g1d_control_v2_20261013/RUN_CONTROL_V2.md`。
 
-旧的分立HF model仓库仅作为历史来源；当前下载入口已迁移至统一仓库。以下实验记录中的机器路径、训练进度和私有入口说明可能是历史快照。
+旧的分立HF model仓库已合并清理；当前下载入口为统一公开仓库。以下实验记录中的机器路径、训练进度和私有入口说明可能是历史快照。
 
 
 G1D 菊花、红枣、柠檬片任务的完整数据处理、subtask 标注、pi0.5 baseline、训练对照、真机执行和 Dexjoco C01 G1D训练与评测适配。**当前 baseline 为官方 OpenPI pi0.5 七个 subtask 的 LoRA step7500**，保留 2026-09-26 曾成功抓杯的权重；它是独立baseline，尚不是G1D C01权重。用户报告当前控制修正后的效果可用，但尚无系统闭环成功率统计。
